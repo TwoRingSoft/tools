@@ -49,7 +49,7 @@ def create_simulators runtime_keyword, device_type_keywords
   selected_runtimes.product(selected_device_types).each do |runtime_device_type_pair_array|
     runtime = runtime_device_type_pair_array.first
     device_type = runtime_device_type_pair_array.last
-    create_command = "xcrun simctl create '#{device_type['name']} (#{runtime['name']})' #{device_type['identifier']} #{runtime['identifier']}"
+    create_command = "xcrun simctl create '#{device_type['name']}' #{device_type['identifier']} #{runtime['identifier']}"
     puts create_command
     `#{create_command}`
   end

@@ -2,7 +2,7 @@
 
 A collection of scripts and tools.
 
-- `rebuild-sims`: Delete all Xcode simulators and recreate one for each compatible platform and device type pairing.
+- `rebuild-sims`: Delete all Xcode simulators and recreate one for each compatible platform and device type pairing. Devices are named using the name of each device type, as provided by `simctl`.
 
 # Installation
 
