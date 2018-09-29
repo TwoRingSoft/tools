@@ -1,0 +1,39 @@
+#! /usr/bin/env ruby
+
+require 'github_api'
+require 'json'
+require_relative '../lib/echoexec'
+
+user = ARGV[0]
+password = ARGV[1]
+otp = ARGV[2]
+
+github = Github.new do |config|
+   config.basic_auth = "#{user}:#{password}"
+   config.connection_options = {headers: {"X-GitHub-OTP" => otp}}
+end
+
+repos = github.repos.list user: user
+forks = repos.select {|x| x.fork}
+
+current_dir = Dir.new('.')
+forks.each do |forked|
+  info = github.repos(user: user, repo: forked.name).get
+  fork_url = info.source.ssh_url
+  name = forked.name
+  url = forked.ssh_url
+  
+  puts '---'
+  if current_dir.entries.include? name then
+    puts "#{name} already exists."
+    next
+  else
+    puts "cloning #{name} from #{url}..."
+    echo_and_exec "git clone #{url}"
+    Dir.chdir "#{name}"
+    puts `pwd`
+    puts "Adding a git remote for #{fork_url} named “upstream.”"
+    echo_and_exec "git remote add upstream #{fork_url}"
+    Dir.chdir ".."
+  end
+end
