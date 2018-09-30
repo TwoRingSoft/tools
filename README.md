@@ -32,3 +32,10 @@ gem install tworingtools-1.0.0.gem # make sure you use the right filename, in ca
 ```
 
 You should then have all the tools available in your `PATH`.
+
+# TODO
+
+## sync-forks
+
+- `--upstream-sync`: fetch upstream's default branch, try to apply new commits to local default branch using `--ff-only` and push to forks' remotes
+- `--tags`: download tags from upstreams
