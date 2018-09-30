@@ -6,27 +6,37 @@ require 'optparse'
 require_relative '../lib/echoexec'
 
 options = {}
-OptionParser.new do |opts|
+parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
+  
     Usage: sync-forks -u/--username <user> -p/--password <pass> [-o/--one-time-pw <otp>]
            sync-forks -u/--username <user> -t/--token <token>
+           
+           If you already have a Personal Access Token, provide it in the second form. 
+           Otherwise, use the first form, which will register a new token for you named
+           “sync-forks”. Then use that to invoke the program again. This is because
+           requests using basic authentication (user/pass) are too rate limited.
+           
   BANNER
   
-  opts.on('-t=s', '--token=s', 'GitHub personal access token') do |t| options[:token] = t end
-  opts.on('-u=s', '--username=s', 'GitHub username') do |user| options[:username] = user end
-  opts.on('-p=s', '--password=s', 'GitHub password') do |pass| options[:password] = pass end
-  opts.on('-o=s', '--one-time-pw=s', 'GitHub 2FA token') do |otp| options[:otp] = otp end
-end.parse!
+  opts.on('-t=s', '--token=<token>', 'GitHub personal access token') do |t| options[:token] = t end
+  opts.on('-u=s', '--username=<username>', 'GitHub username') do |user| options[:username] = user end
+  opts.on('-p=s', '--password=<password>', 'GitHub password') do |pass| options[:password] = pass end
+  opts.on('-o=s', '--one-time-pw=<otp>', 'GitHub 2FA token') do |otp| options[:otp] = otp end
+end
+parser.parse!
 
 puts options
 
 github = nil
 if nil != options[:token] && nil != options[:username] then
   github = Github.new oauth_token: options[:token]
-elsif nil != options[:username] && nil != options[:password] && options[:otp]
+elsif nil != options[:username] && nil != options[:password]
   github = Github.new do |config|
      config.basic_auth = "#{options[:username]}:#{options[:password]}"
-     config.connection_options = {headers: {"X-GitHub-OTP" => options[:otp]}}
+     if nil != options[:otp] then
+       config.connection_options = {headers: {"X-GitHub-OTP" => options[:otp]}}
+     end
   end
   token = github.auth.create scopes: ['repo'], note: 'sync-forks3'
   puts "Created new token, use it to call sync-forks again:"
@@ -36,10 +46,11 @@ elsif nil != options[:username] && nil != options[:password] && options[:otp]
   exit
 else
   puts "Must provide either a username/token or username/password/otp combination to authenticate."
+  puts parser
   exit
 end
 
-repos = github.repos.list user: options[:username]
+repos = github.repos.list user: options[:username], auto_pagination: true
 forks = repos.select {|x| x.fork}
 
 current_dir = Dir.new('.')
