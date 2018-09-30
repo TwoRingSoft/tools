@@ -39,3 +39,4 @@ You should then have all the tools available in your `PATH`.
 
 - `--upstream-sync`: fetch upstream's default branch, try to apply new commits to local default branch using `--ff-only` and push to forks' remotes
 - `--tags`: download tags from upstreams
+- `--repo`: only sync the repo name provided
