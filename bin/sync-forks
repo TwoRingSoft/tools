@@ -9,24 +9,31 @@ options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
   
-    Usage: sync-forks -u/--username <user> -p/--password <pass> [-o/--one-time-pw <otp>]
-           sync-forks -u/--username <user> -t/--token <token>
+    Usage: sync-forks [options] <directory>
+           
+           <directory> is the path containing the directories holding your forks, and/or
+           to where those you don't yet have should be cloned.
+           
+           Examples:
+    
+           sync-forks -u/--username <user> -p/--password <pass> [-o/--one-time-pw <otp>] .
+           sync-forks -u/--username <user> -t/--token <token> .
            
            If you already have a Personal Access Token, provide it in the second form. 
            Otherwise, use the first form, which will register a new token for you named
            “sync-forks”. Then use that to invoke the program again. This is because
            requests using basic authentication (user/pass) are too rate limited.
            
+           Options:
+           
   BANNER
-  
-  opts.on('-t=s', '--token=<token>', 'GitHub personal access token') do |t| options[:token] = t end
-  opts.on('-u=s', '--username=<username>', 'GitHub username') do |user| options[:username] = user end
-  opts.on('-p=s', '--password=<password>', 'GitHub password') do |pass| options[:password] = pass end
-  opts.on('-o=s', '--one-time-pw=<otp>', 'GitHub 2FA token') do |otp| options[:otp] = otp end
+
+  opts.on('-uUSERNAME', '--username=USERNAME', 'GitHub username. Required for all invocations.') do |user| options[:username] = user end
+  opts.on('-tTOKEN', '--token=TOKEN', 'GitHub personal access token. The primary way to use this program.') do |t| options[:token] = t end
+  opts.on('-pPASSWORD', '--password=PASSWORD', 'GitHub password.') do |pass| options[:password] = pass end
+  opts.on('-oOTP', '--one-time-pw=OTP', 'GitHub 2FA token, if you have it enabled.') do |otp| options[:otp] = otp end
 end
 parser.parse!
-
-puts options
 
 github = nil
 if nil != options[:token] && nil != options[:username] then
@@ -53,7 +60,7 @@ end
 repos = github.repos.list user: options[:username], auto_pagination: true
 forks = repos.select {|x| x.fork}
 
-current_dir = Dir.new('.')
+current_dir = Dir.new(ARGV[0])
 forks.each do |forked|
   info = github.repos(user: options[:username], repo: forked.name).get
   fork_url = info.source.ssh_url
