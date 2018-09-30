@@ -40,3 +40,4 @@ You should then have all the tools available in your `PATH`.
 - `--upstream-sync`: fetch upstream's default branch, try to apply new commits to local default branch using `--ff-only` and push to forks' remotes
 - `--tags`: download tags from upstreams
 - `--repo`: only sync the repo name provided
+- `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “origin” and one exists for the original repo's remote named “upstream”
