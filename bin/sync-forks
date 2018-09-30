@@ -2,23 +2,49 @@
 
 require 'github_api'
 require 'json'
+require 'optparse'
 require_relative '../lib/echoexec'
 
-user = ARGV[0]
-password = ARGV[1]
-otp = ARGV[2]
+options = {}
+OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+    Usage: sync-forks -u/--username <user> -p/--password <pass> [-o/--one-time-pw <otp>]
+           sync-forks -u/--username <user> -t/--token <token>
+  BANNER
+  
+  opts.on('-t=s', '--token=s', 'GitHub personal access token') do |t| options[:token] = t end
+  opts.on('-u=s', '--username=s', 'GitHub username') do |user| options[:username] = user end
+  opts.on('-p=s', '--password=s', 'GitHub password') do |pass| options[:password] = pass end
+  opts.on('-o=s', '--one-time-pw=s', 'GitHub 2FA token') do |otp| options[:otp] = otp end
+end.parse!
 
-github = Github.new do |config|
-   config.basic_auth = "#{user}:#{password}"
-   config.connection_options = {headers: {"X-GitHub-OTP" => otp}}
+puts options
+
+github = nil
+if nil != options[:token] && nil != options[:username] then
+  github = Github.new oauth_token: options[:token]
+elsif nil != options[:username] && nil != options[:password] && options[:otp]
+  github = Github.new do |config|
+     config.basic_auth = "#{options[:username]}:#{options[:password]}"
+     config.connection_options = {headers: {"X-GitHub-OTP" => options[:otp]}}
+  end
+  token = github.auth.create scopes: ['repo'], note: 'sync-forks3'
+  puts "Created new token, use it to call sync-forks again:"
+  puts
+  puts "\tsync-forks -u #{user} -t #{token.token}"
+  puts
+  exit
+else
+  puts "Must provide either a username/token or username/password/otp combination to authenticate."
+  exit
 end
 
-repos = github.repos.list user: user
+repos = github.repos.list user: options[:username]
 forks = repos.select {|x| x.fork}
 
 current_dir = Dir.new('.')
 forks.each do |forked|
-  info = github.repos(user: user, repo: forked.name).get
+  info = github.repos(user: options[:username], repo: forked.name).get
   fork_url = info.source.ssh_url
   name = forked.name
   url = forked.ssh_url
@@ -26,13 +52,9 @@ forks.each do |forked|
   puts '---'
   if current_dir.entries.include? name then
     puts "#{name} already exists."
-    next
   else
-    puts "cloning #{name} from #{url}..."
     echo_and_exec "git clone #{url}"
     Dir.chdir "#{name}"
-    puts `pwd`
-    puts "Adding a git remote for #{fork_url} named “upstream.”"
     echo_and_exec "git remote add upstream #{fork_url}"
     Dir.chdir ".."
   end
