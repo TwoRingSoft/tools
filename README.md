@@ -41,3 +41,4 @@ You should then have all the tools available in your `PATH`.
 - `--tags`: download tags from upstreams
 - `--repo`: only sync the repo name provided
 - `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “origin” and one exists for the original repo's remote named “upstream”
+- `--prune`: delete any repositories not found in the forks list received from GitHub api
