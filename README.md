@@ -42,3 +42,11 @@ You should then have all the tools available in your `PATH`.
 - `--repo`: only sync the repo name provided
 - `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “origin” and one exists for the original repo's remote named “upstream”
 - `--prune`: delete any repositories not found in the forks list received from GitHub api
+
+# Contribute
+
+Issues and pull requests are welcome! 
+
+If this project helped you, please consider <a href="https://www.paypal.me/armcknight">leaving a tip</a> 🤗
+
+Do you need help with a project? [I'm currently available for hire or contract.](http://tworingsoft.com/contracts).
