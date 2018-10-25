@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
-## [rebuild-sims 1.2.1] 2018-10-24
+## [rebuild-sims 1.1.1] 2018-10-24
 
 ### Fixed
 
@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - When a custom path is supplied, make sure the cloned repo directories are written inside it.
 
-## [rebuild-sims 1.2.0] 2018-09-29
+## [rebuild-sims 1.1.0] 2018-09-29
 
 ### Added
 
