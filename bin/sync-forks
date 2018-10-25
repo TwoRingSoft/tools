@@ -61,6 +61,7 @@ repos = github.repos.list user: options[:username], auto_pagination: true
 forks = repos.select {|x| x.fork}
 
 current_dir = Dir.new(ARGV[0])
+Dir.chdir current_dir
 forks.each do |forked|
   info = github.repos(user: options[:username], repo: forked.name).get
   fork_url = info.source.ssh_url

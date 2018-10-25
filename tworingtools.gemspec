@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '1.1.0'
-  s.date        = '2018-09-26'
+  s.version     = '1.1.1'
+  s.date        = '2018-10-24'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
   - rebuild-sims: Delete all simulators and recreate one for each compatible platform and device type pairing.
@@ -9,7 +9,9 @@ Gem::Specification.new do |s|
   DESC
   s.authors     = ['Andrew McKnight']
   s.email       = 'andrew@tworingsoft.com'
-  s.files       = ['lib/echoexec.rb']
+  s.files       = [
+    'lib/echoexec.rb'
+  ]
   s.executables = [
     'rebuild-sims', 
     'sync-forks'
