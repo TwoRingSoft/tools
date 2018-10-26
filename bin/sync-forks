@@ -18,6 +18,7 @@ parser = OptionParser.new do |opts|
     
            sync-forks -u/--username <user> -p/--password <pass> [-o/--one-time-pw <otp>] .
            sync-forks -u/--username <user> -t/--token <token> .
+           sync-forks -u/--username <user> -t/--token -n/--repo-name that-one-repo-I-forked <token> .
            
            If you already have a Personal Access Token, provide it in the second form. 
            Otherwise, use the first form, which will register a new token for you named
@@ -32,6 +33,7 @@ parser = OptionParser.new do |opts|
   opts.on('-tTOKEN', '--token=TOKEN', 'GitHub personal access token. The primary way to use this program.') do |t| options[:token] = t end
   opts.on('-pPASSWORD', '--password=PASSWORD', 'GitHub password.') do |pass| options[:password] = pass end
   opts.on('-oOTP', '--one-time-pw=OTP', 'GitHub 2FA token, if you have it enabled.') do |otp| options[:otp] = otp end
+  opts.on('-rREPO', '--repo-name=REPO', 'The name of a particular repository to sync.') do |repo| options[:repo] = repo end
 end
 parser.parse!
 
@@ -59,6 +61,10 @@ end
 
 repos = github.repos.list user: options[:username], auto_pagination: true
 forks = repos.select {|x| x.fork}
+
+if options[:repo] != nil then
+  forks.select! {|x| x.name == options[:repo]}
+end
 
 current_dir = Dir.new(ARGV[0])
 Dir.chdir current_dir
