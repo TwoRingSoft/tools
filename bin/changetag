@@ -7,8 +7,7 @@ require_relative '../lib/echoexec'
 ILLEGAL_COMMENT_CHAR = 65
 INVALID_CHANGELOG_PATH = 66
 UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT = 67
-TAG_DOES_NOT_EXIST = 68
-CHANGELOG_ENTRY_NOT_FOUND = 69
+CHANGELOG_ENTRY_NOT_FOUND = 68
 
 options = {}
 parser = OptionParser.new do |opts|
@@ -62,10 +61,8 @@ end
 
 git_tag = ARGV[1]
 current_git_tag_annotation = `git tag -n #{git_tag}`.strip
-if current_git_tag_annotation == '' then
-  puts "The tag #{git_tag} does not exist."
-  exit TAG_DOES_NOT_EXIST
-elsif current_git_tag_annotation != git_tag and options[:force] != true then
+git_tag_exists = current_git_tag_annotation != ''
+if git_tag_exists and current_git_tag_annotation != git_tag and options[:force] != true then
   puts "The tag #{git_tag} already has an annotation. To overwrite it, call changetag with the -f/--force option."
   exit UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT
 end
@@ -112,4 +109,8 @@ entry_contents = changelog_contents[entry_start_idx...entry_end_idx]
 
 # create or edit a git tag with the changelog contents
 
-echo_and_exec "git tag #{git_tag} #{git_tag} -f -m '#{entry_contents}'"
+if git_tag_exists then
+  echo_and_exec "git tag #{git_tag} #{git_tag} -f -m #{entry_contents.dump}"
+else
+  echo_and_exec "git tag #{git_tag} -m #{entry_contents.dump}"
+end
