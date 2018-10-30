@@ -1,0 +1,115 @@
+#! /usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/echoexec'
+
+# failure modes
+ILLEGAL_COMMENT_CHAR = 65
+INVALID_CHANGELOG_PATH = 66
+UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT = 67
+TAG_DOES_NOT_EXIST = 68
+CHANGELOG_ENTRY_NOT_FOUND = 69
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: changetag [options] <changelog-path> <tag-name>
+
+           Write changes from changelogs into git tags.
+
+           For normal usage, provide the path to the changelog from which to extract release notes, and the git tag name for which you'd like to extract release notes. This pulls the relevant section from your changelog, as long as you adhere to the format described at http://keepachangelog.com/en/1.0.0/.
+
+           Note that the specification requires using the '#' character for hierarchical organization. Conveniently, this also renders different header styles with markdown. Unfortunately, that character is used to denote comments in git tag annotations (similar to git commit messages). So, before using changetag, you must change this to a different character: 
+
+                $> git config core.commentchar "@"
+
+           changetag looks for this configuration setting, and if it's set to ‘#’, will fail with a message instructing you to change it.
+
+           By default, changetag tries to extract the relevant section from your changelog using the name of the git tag you supply. If your changelog entries differ from your tag names, you can supply an override using the -n/--name option.
+
+    Examples:
+
+           Take the changelog entry for version 1.2.4 and write it into the tag annotation for tag ‘1.2.4’, creating the tag if it doesn't already exist, and overwriting it if it does:
+
+                $> changetag /path/to/.../CHANGELOG.md 1.2.4
+
+    Options:
+
+  BANNER
+  opts.on('-f', '--force', 'If a git tag already exists with a nonempty annotation message, overwrite the message. (If this is not supplied, changetag will quit with a warning that you are attempting to overwrite an existing tag annotation.)') do |force| options[:force] = true end
+  opts.on('-nNAME', '--name=NAME', 'By default, changetag tries to extract the relevant section from your changelog using the name of the git tag you supply. If your changelog entries differ from your tag names, you can supply an override using this option. Make sure that it includes all content contained withing the square brackes for the entry header.') do |name| options[:name] = name end
+end
+parser.parse!
+
+# check for a valid git message comment character
+
+comment_char = `git config --get core.commentchar`.strip
+if comment_char == '#' then
+  puts 'Your git comment character is still set to ‘#’. You need to change it to another character before using changetag. For instance:'
+  puts "\tgit config core.commentchar '@'"
+  exit ILLEGAL_COMMENT_CHAR
+end
+
+# get the changelog entry contents
+
+changelog_path = ARGV[0]
+
+unless File.file?(changelog_path) then
+  puts "The path '#{changelog_path}' does not point to a valid file."
+  exit INVALID_CHANGELOG_PATH
+end
+
+git_tag = ARGV[1]
+current_git_tag_annotation = `git tag -n #{git_tag}`.strip
+if current_git_tag_annotation == '' then
+  puts "The tag #{git_tag} does not exist."
+  exit TAG_DOES_NOT_EXIST
+elsif current_git_tag_annotation != git_tag and options[:force] != true then
+  puts "The tag #{git_tag} already has an annotation. To overwrite it, call changetag with the -f/--force option."
+  exit UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT
+end
+
+=begin
+Extract the relevant section from the changelog, which should have the following format: (square brackets should be present, chevrons are to denote content descriptions)
+
+## [<entry-name>] <entry-date>
+
+<contents>
+
+## [<subsequent-entry-name>] <entry-date>
+
+<contents>
+
+... etc ...
+=end
+changelog_contents = File.open(changelog_path).readlines
+entry_name = options[:name] or git_tag
+
+entry_start_idx = -1
+changelog_contents.each_with_index do |line, i|
+  if line.include?(/.*\#\#.*\[#{entry_name}\].*/) then
+    entry_start_idx = i
+    break
+  end
+end
+
+if entry_start_idx == -1 then
+  puts "Could not find an entry in the changelog named '#{entry_name}'."
+  exit CHANGELOG_ENTRY_NOT_FOUND
+end
+
+entry_end_idx = -1
+changelog_contents.each_with_index do |line, i|
+  next if i < entry_start_idx
+  if line[0...2] == '## ' then
+    entry_end_idx = i - 1
+    break
+  end
+end
+
+entry_contents = changelog_contents[entry_start_idx...entry_end_idx]
+
+# create or edit a git tag with the changelog contents
+
+echo_and_exec "git tag #{git_tag} #{git_tag} -f -m '#{entry_contents}'"
