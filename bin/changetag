@@ -89,7 +89,8 @@ end
 
 entry_start_idx = -1
 changelog_contents.each_with_index do |line, i|
-  if line.include?(/.*\#\#.*\[#{entry_name}\].*/) then
+  next if line[0..2] != '## '
+  if line.include?("[#{entry_name}]") then
     entry_start_idx = i
     break
   end
@@ -102,8 +103,8 @@ end
 
 entry_end_idx = -1
 changelog_contents.each_with_index do |line, i|
-  next if i < entry_start_idx
-  if line[0...2] == '## ' then
+  next if i <= entry_start_idx
+  if line[0..2] == '## ' then
     entry_end_idx = i - 1
     break
   end
