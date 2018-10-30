@@ -81,7 +81,11 @@ Extract the relevant section from the changelog, which should have the following
 ... etc ...
 =end
 changelog_contents = File.open(changelog_path).readlines
-entry_name = options[:name] or git_tag
+if options[:name] != nil then 
+  entry_name = options[:name]
+else 
+  entry_name = git_tag
+end
 
 entry_start_idx = -1
 changelog_contents.each_with_index do |line, i|
