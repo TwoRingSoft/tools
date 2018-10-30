@@ -5,6 +5,10 @@ require 'json'
 require 'optparse'
 require_relative '../lib/echoexec'
 
+# failure modes
+FURTHER_REQUESTS_REQUIRE_TOKEN = 65
+MISSING_REQUIRED_CREDENTIALS = 66
+
 options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
@@ -52,11 +56,11 @@ elsif nil != options[:username] && nil != options[:password]
   puts
   puts "\tsync-forks -u #{user} -t #{token.token}"
   puts
-  exit
+  exit FURTHER_REQUESTS_REQUIRE_TOKEN
 else
   puts "Must provide either a username/token or username/password/otp combination to authenticate."
   puts parser
-  exit
+  exit MISSING_REQUIRED_CREDENTIALS
 end
 
 repos = github.repos.list user: options[:username], auto_pagination: true
