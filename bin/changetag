@@ -110,7 +110,7 @@ changelog_contents.each_with_index do |line, i|
   end
 end
 
-entry_contents = changelog_contents[entry_start_idx...entry_end_idx]
+entry_contents = changelog_contents[entry_start_idx..entry_end_idx].select{|x| x != "\n"}.join "\n"
 
 # create or edit a git tag with the changelog contents
 
