@@ -111,10 +111,25 @@ changelog_contents.each_with_index do |line, i|
   end
 end
 
-entry_contents = changelog_contents[entry_start_idx..entry_end_idx].select{|x| x != "\n"}.join("\n").gsub('`', '\\\`').gsub("'", '\\\'').gsub('"', '\\\"').split("\n").join("\n")
+# get the changelog entry lines
+entry_contents = changelog_contents[entry_start_idx..entry_end_idx].select{|x| x != "\n"}
+
+# clean up the entry name by just setting it to the name of the tag
+entry_contents[0] = entry_name
+
+# combine the lines and escape any quotes that will mess with the command executed in shell
+entry_contents = entry_contents.join("\n").gsub('`', '\\\`').gsub("'", '\\\'').gsub('"', '\\\"').split("\n")
+
+# shorten any markdown headings. The entry name should be at level two ("##"), so remove two from each string of hashes that begins a line
+entry_contents.map! do |line|
+  line unless line[0] == '#'
+  line.gsub(/^\#\#/, '')
+end
+
+# join the final result into a string
+entry_contents = entry_contents.join("\n")
 
 # create or edit a git tag with the changelog contents
-
 if git_tag_exists then
   echo_and_exec "git tag #{git_tag} #{git_tag} -f -m \"#{entry_contents}\""
 else
