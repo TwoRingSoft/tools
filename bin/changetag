@@ -55,7 +55,6 @@ end
 # get the changelog entry contents
 
 changelog_path = ARGV[0]
-
 unless File.file?(changelog_path) then
   puts "The path '#{changelog_path}' does not point to a valid file."
   exit INVALID_CHANGELOG_PATH
@@ -69,9 +68,8 @@ if git_tag_exists and current_git_tag_annotation != git_tag and options[:force] 
   exit UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT
 end
 
+# Extract the relevant section from the changelog, which should have the following format: (square brackets should be present, chevrons are to denote content descriptions)
 =begin
-Extract the relevant section from the changelog, which should have the following format: (square brackets should be present, chevrons are to denote content descriptions)
-
 ## [<entry-name>] <entry-date>
 
 <contents>
@@ -82,6 +80,7 @@ Extract the relevant section from the changelog, which should have the following
 
 ... etc ...
 =end
+
 changelog_contents = File.open(changelog_path).readlines
 if options[:name] != nil then 
   entry_name = options[:name]
