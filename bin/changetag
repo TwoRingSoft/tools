@@ -44,9 +44,11 @@ parser.parse!
 # check for a valid git message comment character
 
 comment_char = `git config --get core.commentchar`.strip
-if comment_char == '#' then
+if comment_char == '' or comment_char == '#' then
   puts 'Your git comment character is still set to ‘#’. You need to change it to another character before using changetag. For instance:'
+  puts
   puts "\tgit config core.commentchar '@'"
+  puts
   exit ILLEGAL_COMMENT_CHAR
 end
 
@@ -110,12 +112,12 @@ changelog_contents.each_with_index do |line, i|
   end
 end
 
-entry_contents = changelog_contents[entry_start_idx..entry_end_idx].select{|x| x != "\n"}.join "\n"
+entry_contents = changelog_contents[entry_start_idx..entry_end_idx].select{|x| x != "\n"}.join("\n").gsub('`', '\\\`').gsub("'", '\\\'').gsub('"', '\\\"').split("\n").join("\n")
 
 # create or edit a git tag with the changelog contents
 
 if git_tag_exists then
-  echo_and_exec "git tag #{git_tag} #{git_tag} -f -m #{entry_contents.dump}"
+  echo_and_exec "git tag #{git_tag} #{git_tag} -f -m \"#{entry_contents}\""
 else
-  echo_and_exec "git tag #{git_tag} -m #{entry_contents.dump}"
+  echo_and_exec "git tag #{git_tag} -m \"#{entry_contents}\""
 end
