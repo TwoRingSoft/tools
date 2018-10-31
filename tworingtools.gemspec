@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '1.3.0'
+  s.version     = '1.3.1'
   s.date        = '2018-10-30'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC

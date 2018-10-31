@@ -14,6 +14,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.3.1] 2018-10-31
+
+### Fixed
+
+#### `changetag`
+
+- Clean up changelog entry contents before writing to git tags, by replacing e.g. `## [1.3.1] 2018-10-31` with `1.3.1` for the title, and reducing all subsequent markdown headers by 2 levels.
+
 ## [1.3.0] 2018-10-30
 
 ### Added
