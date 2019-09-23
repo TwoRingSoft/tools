@@ -2,11 +2,11 @@ build:
 	gem build tworingtools.gemspec
 
 install:
-	rbenv exec gem install $(GEMSPEC)
+	rbenv exec gem install tworingtools-`vrsn --read --file tworingtools.gemspec`.gem
 
 release:
 	rbenv exec changetag CHANGELOG.md `vrsn --read --file tworingtools.gemspec`
 	git push --tags
-	gem push $(GEMSPEC)
+	gem push tworingtools-`vrsn --read --file tworingtools.gemspec`.gem
 	git push
 	
