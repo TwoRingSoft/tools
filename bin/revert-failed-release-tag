@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+
+podspec = ARGV[0]
+
+version_file = "#{podspec}.podspec"
+version = `vrsn --read --file #{version_file}`.strip
+tag = "#{podspec}-#{version}"
+sh "git tag --delete #{tag}"
+sh "git push --delete origin #{tag}"

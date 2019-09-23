@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '1.3.1'
+  s.version     = '1.4.0'
   s.date        = '2018-10-30'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
@@ -16,7 +16,10 @@ Gem::Specification.new do |s|
   s.executables = [
     'rebuild-sims',
     'sync-forks',
-    'changetag'
+    'changetag',
+    'prerelease-podspec',
+    'release-podspec',
+    'revert-failed-release-tag'
   ]
   s.homepage    = 'https://github.com/TwoRingSoft/tools'
   s.license     = 'MIT'

@@ -1,0 +1,64 @@
+#! /usr/bin/env ruby
+
+require 'open3'
+require 'optparse'
+
+podspec = ARGV[0]
+
+# failure modes
+PODSPEC_FAILED_VALIDATION = 65
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: prerelease-podspec [options] <podspec-name> [<podspec-path>]
+
+           Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
+
+    Options:
+
+  BANNER
+  opts.on('-w', '--allow-warnings', 'Pass \'--allow-warnings\' to \'cocoapods spec lint\'.') do |force| options[:allow_warnings] = true end
+  opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
+  opts.on('-h', '--help', 'Print this help message.') do 
+    puts opts
+    exit
+  end
+end
+parser.parse!
+
+version_file = "#{podspec}.podspec"
+
+current_version = `vrsn --read --file #{version_file}`.strip
+branch = "#{podspec}-#{current_version}-release"
+`git checkout -b #{branch}`
+
+tag_root = "#{podspec}-#{current_version}-RC"
+release_candidate_number = `git tag --list | grep #{tag_root} | wc -l`.strip.to_i + 1
+release_candidate_tag = "#{tag_root}#{release_candidate_number}"
+`sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}`
+`git add #{version_file}`
+`git commit --message 'TEMP: set podspec version to release candidate version'`
+`git tag #{release_candidate_tag}`
+`git push --tags`
+
+puts "About to lint the podspec. This takes a while... (it is now #{Time.now})"
+spec_lint_flags = Array.new 
+if options[:allow_warnings] != nil then
+  spec_lint_flags << '--allow-warnings'
+end
+if options[:verbose] != nil then
+  spec_lint_flags << '--verbose'
+end
+stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
+
+`git checkout master`
+`git branch -D #{branch}`
+
+if status != 0 then
+  puts "Podspec failed validation:\nstdout: #{stdout}\nstderr: #{stderr}"
+  exit PODSPEC_FAILED_VALIDATION
+else
+  puts "Podspec passed validation!"
+end
