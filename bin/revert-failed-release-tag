@@ -8,7 +8,7 @@ parser = OptionParser.new do |opts|
 
     Usage: revert-failed-release-tag <podspec-name>
 
-           Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
+           Delete any tags created for a release process that winds up failing, so it can be retried without failing on git trying to recreate an existing tag.
 
     Options:
 
