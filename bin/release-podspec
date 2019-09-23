@@ -8,7 +8,7 @@ options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
 
-    Usage: release-podspec [options] <podspec-name> [<podspec-path>]
+    Usage: release-podspec [options] <podspec-name>
 
            Form Git tags and push them to remote, then push the podspec to CocoaPods trunk.
 

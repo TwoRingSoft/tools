@@ -12,7 +12,7 @@ options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
 
-    Usage: prerelease-podspec [options] <podspec-name> [<podspec-path>]
+    Usage: prerelease-podspec [options] <podspec-name>
 
            Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
 

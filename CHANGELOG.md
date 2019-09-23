@@ -14,6 +14,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.4.1] 2019-09-22
+
+### Fixed
+
+- Bug in `revert-failed-release-tag`.
+- Help docs in `prerelease-podspec`, `release-podspec` and `revert-failed-release-tag`.
+
 ## [1.4.0] 2019-09-22
 
 ### Added

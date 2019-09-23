@@ -2,8 +2,26 @@
 
 podspec = ARGV[0]
 
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: revert-failed-release-tag <podspec-name>
+
+           Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
+
+    Options:
+
+  BANNER
+  opts.on('-h', '--help', 'Print this help message.') do 
+    puts opts
+    exit
+  end
+end
+parser.parse!
+
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`.strip
 tag = "#{podspec}-#{version}"
-sh "git tag --delete #{tag}"
-sh "git push --delete origin #{tag}"
+`git tag --delete #{tag}`
+`git push --delete origin #{tag}`
