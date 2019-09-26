@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby
 
+require 'optparse'
+
 podspec = ARGV[0]
 
 options = {}

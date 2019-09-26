@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.4.2] 2019-09-25
+
+### Fixed
+
+- Bug in `revert-failed-release-tag`–forgot to `require 'optparse'`.
+
 ## [1.4.1] 2019-09-22
 
 ### Fixed
