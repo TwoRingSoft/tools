@@ -25,5 +25,5 @@ parser.parse!
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`.strip
 tag = "#{podspec}-#{version}"
-`git tag --delete #{tag}`
-`git push --delete origin #{tag}`
+echoexec "git tag --delete #{tag}"
+echoexec "git push --delete origin #{tag}"

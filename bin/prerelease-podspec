@@ -32,16 +32,16 @@ version_file = "#{podspec}.podspec"
 
 current_version = `vrsn --read --file #{version_file}`.strip
 branch = "#{podspec}-#{current_version}-release"
-`git checkout -b #{branch}`
+echoexec "git checkout -b #{branch}"
 
 tag_root = "#{podspec}-#{current_version}-RC"
 release_candidate_number = `git tag --list | grep #{tag_root} | wc -l`.strip.to_i + 1
 release_candidate_tag = "#{tag_root}#{release_candidate_number}"
-`sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}`
-`git add #{version_file}`
-`git commit --message 'TEMP: set podspec version to release candidate version'`
-`git tag #{release_candidate_tag}`
-`git push --tags`
+echoexec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}"
+echoexec "git add #{version_file}"
+echoexec "git commit --message 'TEMP: set podspec version to release candidate version'"
+echoexec "git tag #{release_candidate_tag}"
+echoexec 'git push --tags'
 
 puts "About to lint the podspec. This takes a while... (it is now #{Time.now})"
 spec_lint_flags = Array.new 
@@ -53,8 +53,8 @@ if options[:verbose] != nil then
 end
 stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
 
-`git checkout master`
-`git branch -D #{branch}`
+echoexec 'git checkout master'
+echoexec "git branch -D #{branch}"
 
 if status != 0 then
   puts "Podspec failed validation:\nstdout: #{stdout}\nstderr: #{stderr}"

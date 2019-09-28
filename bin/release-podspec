@@ -1,6 +1,8 @@
 #! /usr/bin/env ruby
 
+require 'open3'
 require 'optparse'
+require_relative '../lib/echoexec'
 
 podspec = ARGV[0]
 
@@ -27,8 +29,8 @@ parser.parse!
 
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`
-`git tag #{podspec}-#{version.strip}`
-`git push --tags`
+echoexec "git tag #{podspec}-#{version.strip}"
+echoexec 'git push --tags'
 
 spec_lint_flags = Array.new 
 if options[:allow_warnings] != nil then
@@ -38,10 +40,18 @@ if options[:verbose] != nil then
   spec_lint_flags << '--verbose'
 end
 
-repo = String.new
+command = String.new
 if options[:repo] != nil then
-	`rbenv exec bundle exec pod repo push #{options[:repo]} #{podspec}.podspec #{spec_lint_flags.join ' '}`
+	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{podspec}.podspec #{spec_lint_flags.join ' '}"
 else
-	`rbenv exec bundle exec pod trunk push #{podspec}.podspec #{spec_lint_flags.join ' '}`
+	command = "rbenv exec bundle exec pod trunk push #{podspec}.podspec #{spec_lint_flags.join ' '}"
 end
 
+puts command
+stdout, stderr, status = Open3.capture3 command
+
+unless status == 0 then
+  fail stderr
+else
+  puts 'Successfully pushed spec!'
+end
