@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.5.0] 2019-09-27
+
+### Added
+
+- `bumpr`: increment the desired part of a version number (major/minor/patch/build) and write the change to a git commit.
+
 ## [1.4.2] 2019-09-25
 
 ### Fixed

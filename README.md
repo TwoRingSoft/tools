@@ -8,6 +8,7 @@ A collection of scripts and tools to help with software development.
 - `prerelease-podspec`: Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
 - `release-podspec`: Create a tag with the version and push it to repo origin, push podspec to CocoaPods trunk.
 - `revert-failed-release-tag`: In case `release-podspec` fails, make sure the tag it may have created/pushed is destroyed before trying to run it again after fixing, so it doesn't break due to the tag already existing the second time around.
+- `bumpr`: Increment the desired part of a version number (major/minor/patch/build) and write the change to a git commit.
 
 # Installation
 

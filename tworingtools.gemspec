@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '1.4.2'
-  s.date        = '2019-09-25'
+  s.version     = '1.5.0'
+  s.date        = '2019-09-30'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
   - rebuild-sims: Delete all simulators and recreate one for each compatible platform and device type pairing.
@@ -19,7 +19,8 @@ Gem::Specification.new do |s|
     'changetag',
     'prerelease-podspec',
     'release-podspec',
-    'revert-failed-release-tag'
+    'revert-failed-release-tag',
+    'bumpr'
   ]
   s.homepage    = 'https://github.com/TwoRingSoft/tools'
   s.license     = 'MIT'

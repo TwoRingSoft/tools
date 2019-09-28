@@ -1,0 +1,56 @@
+#! /usr/bin/env ruby
+
+require 'open3'
+require 'optparse'
+require_relative '../lib/echoexec'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: bumpr <component> /path/to/../version.file
+
+           Component types:
+
+           - "major", "minor", "patch" semantic version components
+           - "build" numeric build numbers
+
+  BANNER
+  opts.on('-h', '--help', 'Print this help message.') do 
+    puts opts
+    exit
+  end
+end
+parser.parse!
+
+modified_file_count, stderr, status = Open3.capture3("git status --porcelain | egrep '^(M| M)' | wc -l")
+if modified_file_count.to_i > 0 then
+    echo_and_exec 'git stash'
+end
+
+component = ARGV[0]
+version_file = ARGV[1]
+
+# map this scripts argument values (key) to vrsnr's argument values (value)
+argument = {
+  'major' => 'major',
+  'minor' => 'minor',
+  'patch' => 'patch',
+  'build' => '--numeric'
+}[component]
+
+if argument == nil then
+  puts 'Unrecognized version component.'
+  exit 1
+end
+
+command = "vrsn #{argument} --file #{version_file}"
+puts command
+stdout, stderr, status = Open3.capture3(command)
+
+echo_and_exec "git add #{version_file}"
+echo_and_exec "git commit --message \"#{stdout}\""
+
+if modified_file_count.to_i > 0 then
+    echo_and_exec "git stash pop"
+end
