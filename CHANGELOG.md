@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.5.1] 2019-10-03
+
+### Fixed
+
+Added early exit to `release-podspec` if the release tag already exists.
+
 ## [1.5.0] 2019-09-27
 
 ### Added

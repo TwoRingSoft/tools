@@ -19,7 +19,7 @@ parser = OptionParser.new do |opts|
   BANNER
   opts.on('-w', '--allow-warnings', 'Pass \'--allow-warnings\' to \'cocoapods spec lint\'.') do |force| options[:allow_warnings] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
-  opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushed the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
+  opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
@@ -29,7 +29,10 @@ parser.parse!
 
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`
-echoexec "git tag #{podspec}-#{version.strip}"
+stdout, stderr, status = Open3.capture3 "git tag #{podspec}-#{version.strip}"
+if status != 0
+  fail 'Tag already exists.'
+end 
 echoexec 'git push --tags'
 
 spec_lint_flags = Array.new 
