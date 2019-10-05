@@ -50,11 +50,4 @@ else
 	command = "rbenv exec bundle exec pod trunk push #{podspec}.podspec #{spec_lint_flags.join ' '}"
 end
 
-puts command
-stdout, stderr, status = Open3.capture3 command
-
-unless status == 0 then
-  fail stderr
-else
-  puts 'Successfully pushed spec!'
-end
+echo_and_exec command
