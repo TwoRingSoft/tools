@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.5.1] 2019-10-05
+
+### Fixed
+
+- Improved output of commands in `[pre]release-podspec`.
+
 ## [1.5.0] 2019-10-04
 
 ### Added
