@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby
 
 require 'optparse'
+require_relative '../lib/echoexec'
 
 podspec = ARGV[0]
 
@@ -25,5 +26,5 @@ parser.parse!
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`.strip
 tag = "#{podspec}-#{version}"
-echoexec "git tag --delete #{tag}"
-echoexec "git push --delete origin #{tag}"
+echo_and_exec "git tag --delete #{tag}"
+echo_and_exec "git push --delete origin #{tag}"

@@ -18,7 +18,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fixed
 
-Added early exit to `release-podspec` if the release tag already exists.
+- Added early exit to `release-podspec` if the release tag already exists.
+- Some usages of the `echoexec` lib method in `revert-failed-release-tag` and `release-podspec`.
 
 ## [1.5.0] 2019-09-27
 
