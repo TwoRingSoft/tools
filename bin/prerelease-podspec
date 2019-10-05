@@ -2,6 +2,7 @@
 
 require 'open3'
 require 'optparse'
+require_relative '../lib/echoexec'
 
 podspec = ARGV[0]
 
@@ -32,16 +33,16 @@ version_file = "#{podspec}.podspec"
 
 current_version = `vrsn --read --file #{version_file}`.strip
 branch = "#{podspec}-#{current_version}-release"
-echoexec "git checkout -b #{branch}"
+echo_and_exec "git checkout -b #{branch}"
 
 tag_root = "#{podspec}-#{current_version}-RC"
 release_candidate_number = `git tag --list | grep #{tag_root} | wc -l`.strip.to_i + 1
 release_candidate_tag = "#{tag_root}#{release_candidate_number}"
-echoexec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}"
-echoexec "git add #{version_file}"
-echoexec "git commit --message 'TEMP: set podspec version to release candidate version'"
-echoexec "git tag #{release_candidate_tag}"
-echoexec 'git push --tags'
+echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}"
+echo_and_exec "git add #{version_file}"
+echo_and_exec "git commit --message 'TEMP: set podspec version to release candidate version'"
+echo_and_exec "git tag #{release_candidate_tag}"
+echo_and_exec 'git push --tags'
 
 puts "About to lint the podspec. This takes a while... (it is now #{Time.now})"
 spec_lint_flags = Array.new 
@@ -53,8 +54,8 @@ if options[:verbose] != nil then
 end
 stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
 
-echoexec 'git checkout master'
-echoexec "git branch -D #{branch}"
+echo_and_exec 'git checkout master'
+echo_and_exec "git branch -D #{branch}"
 
 if status != 0 then
   puts "Podspec failed validation:\nstdout: #{stdout}\nstderr: #{stderr}"
