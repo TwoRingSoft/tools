@@ -54,11 +54,13 @@ if options[:verbose] != nil then
 end
 stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
 
+puts "stdout: #{stdout}"
+
 echo_and_exec 'git checkout master'
 echo_and_exec "git branch -D #{branch}"
 
 if status != 0 then
-  puts "Podspec failed validation:\nstdout: #{stdout}\nstderr: #{stderr}"
+  puts "Podspec failed validation:\nstderr: #{stderr}"
   exit PODSPEC_FAILED_VALIDATION
 else
   puts "Podspec passed validation!"
