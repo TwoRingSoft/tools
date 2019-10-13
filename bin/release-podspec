@@ -29,7 +29,9 @@ parser.parse!
 
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`
-stdout, stderr, status = Open3.capture3 "git tag #{podspec}-#{version.strip}"
+tag_command = "git tag #{podspec}-#{version.strip}"
+puts tag_command
+stdout, stderr, status = Open3.capture3 tag_command
 if status != 0
   fail 'Tag already exists.'
 end 
