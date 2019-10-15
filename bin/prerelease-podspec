@@ -38,7 +38,7 @@ echo_and_exec "git checkout -b #{branch}"
 tag_root = "#{podspec}-#{current_version}-RC"
 release_candidate_number = `git tag --list | grep #{tag_root} | wc -l`.strip.to_i + 1
 release_candidate_tag = "#{tag_root}#{release_candidate_number}"
-echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{release_candidate_tag}\"\\'/g\" #{version_file}"
+echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}"
 echo_and_exec "git add #{version_file}"
 echo_and_exec "git commit --message 'TEMP: set podspec version to release candidate version'"
 echo_and_exec "git tag #{release_candidate_tag}"

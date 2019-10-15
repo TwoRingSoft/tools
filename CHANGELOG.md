@@ -18,7 +18,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fixed
 
-- `prerelease-podspec` now correctly uses the tag name for the version string in the podspec.
 - `release-podspec` prints the command used to create the release tag before executing it.
 
 ## [1.5.2] 2019-10-05
