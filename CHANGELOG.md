@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.6.0] 2019-11-26
+
+### Fixed
+
+- `release-podspec` prints the command used to create the release tag before executing it.
+
 ## [1.5.3] 2019-10-12
 
 ### Fixed

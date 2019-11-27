@@ -18,6 +18,7 @@ parser = OptionParser.new do |opts|
 
   BANNER
   opts.on('-w', '--allow-warnings', 'Pass \'--allow-warnings\' to \'cocoapods spec lint\'.') do |force| options[:allow_warnings] = true end
+  opts.on('-s', '--skip-tests', 'Pass \'--skip-tests\' to \'cocoapods spec lint\'.') do |skip_tests| options[:skip_tests] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
   opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
   opts.on('-h', '--help', 'Print this help message.') do 
@@ -43,6 +44,9 @@ if options[:allow_warnings] != nil then
 end
 if options[:verbose] != nil then
   spec_lint_flags << '--verbose'
+end
+if options[:skip_tests] != nil then
+  spec_lint_flags << '--skip-tests'
 end
 
 command = String.new

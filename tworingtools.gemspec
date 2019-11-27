@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
   s.version     = '1.5.3'
-  s.date        = '2019-10-05'
+  s.date        = '2019-11-26'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
   - rebuild-sims: Delete all simulators and recreate one for each compatible platform and device type pairing.
