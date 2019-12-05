@@ -22,6 +22,7 @@ parser = OptionParser.new do |opts|
   BANNER
   opts.on('-w', '--allow-warnings', 'Pass \'--allow-warnings\' to \'cocoapods spec lint\'.') do |force| options[:allow_warnings] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
+  opts.on('-n', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
@@ -35,13 +36,20 @@ current_version = `vrsn --read --file #{version_file}`.strip
 branch = "#{podspec}-#{current_version}-release"
 echo_and_exec "git checkout -b #{branch}"
 
-tag_root = "#{podspec}-#{current_version}-RC"
-release_candidate_number = `git tag --list | grep #{tag_root} | wc -l`.strip.to_i + 1
-release_candidate_tag = "#{tag_root}#{release_candidate_number}"
-echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{current_version}-RC#{release_candidate_number}\"\\'/g\" #{version_file}"
+version_root = "#{current_version}-RC"
+release_candidate_number = `git tag --list | grep #{version_root} | wc -l`.strip.to_i + 1
+
+tag_value = String.new
+if options[:podspec_name_in_tag] then
+  tag_value = "#{podspec}-#{version_root}#{release_candidate_number}"
+else
+  tag_value = "#{version_root}#{release_candidate_number}"
+end
+
+echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{tag_value}\"\\'/g\" #{version_file}"
 echo_and_exec "git add #{version_file}"
 echo_and_exec "git commit --message 'TEMP: set podspec version to release candidate version'"
-echo_and_exec "git tag #{release_candidate_tag}"
+echo_and_exec "git tag #{tag_value}"
 echo_and_exec 'git push --tags'
 
 puts "About to lint the podspec. This takes a while... (it is now #{Time.now})"
