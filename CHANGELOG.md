@@ -14,6 +14,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.9.0] 2019-12-12
+
+### Changed
+
+### Added
+- Command line option to specify if the tags in `revert-failed-release-tag` should use the podspec's name, same as 1.7.0's change to `prerelease-podspec` and 1.8.0's change to `release-podspec`.
+
 ## [1.8.0] 2019-12-12
 
 ### Changed

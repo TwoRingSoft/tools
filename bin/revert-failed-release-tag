@@ -16,6 +16,7 @@ parser = OptionParser.new do |opts|
     Options:
 
   BANNER
+  opts.on('-n', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
@@ -25,6 +26,11 @@ parser.parse!
 
 version_file = "#{podspec}.podspec"
 version = `vrsn --read --file #{version_file}`.strip
-tag = "#{podspec}-#{version}"
+tag = String.new
+if options[:podspec_name_in_tag] then
+	tag = "#{podspec}-#{version}"
+else
+	tag = version
+end
 echo_and_exec "git tag --delete #{tag}"
 echo_and_exec "git push --delete origin #{tag}"
