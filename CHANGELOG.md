@@ -9,12 +9,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 
 ### Added
-- Command line option to specify if the tags in `prerelease-podspec` should use the podspec's name; helpful if the repo has multiple podspecs and must distinguish between versions of different ones in tag names.
 
 ### Fixed
-- Use the same tag value in the version string in podspecs being tested by `prerelease-podspec`.
 
 ---
+
+## [1.8.0] 2019-12-12
+
+### Changed
+
+### Added
+- Command line option to specify if the tags in `release-podspec` should use the podspec's name, same as 1.7.0's change to `prerelease-podspec`.
 
 ## [1.7.0] 2019-12-04
 
