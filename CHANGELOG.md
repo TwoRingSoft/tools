@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.9.1] 2020-03-10
+
+### Fixed
+
+- When providing `--podspec-name-in-tag`, don't put the podspec name in the podspec's `version` property, because those podspecs that do use the name in the tag will have a `:tag` value of `#{name}-#{version}`, which would result in the podspec name appearing twice if it also appeared in the `version`.
+
 ## [1.9.0] 2019-12-12
 
 ### Changed
