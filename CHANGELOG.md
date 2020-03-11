@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.9.2] 2020-03-10
+
+### Fixed
+
+- Yanked 1.9.1. Need to push a new version number.
+
 ## [1.9.1] 2020-03-10
 
 ### Fixed
