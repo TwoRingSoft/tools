@@ -10,6 +10,6 @@ install:
 release:
 	rbenv exec bundle exec changetag CHANGELOG.md `vrsn --read --file tworingtools.gemspec`
 	git push --tags
-	gem push tworingtools-`vrsn --read --file tworingtools.gemspec`.gem
+	rbenv exec gem push tworingtools-`vrsn --read --file tworingtools.gemspec`.gem
 	git push
 	
