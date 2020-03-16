@@ -1,3 +1,6 @@
+init:
+	rbenv exec bundle update
+
 version:
 	rbenv exec bundle exec bumpr $(COMPONENT) tworingtools.gemspec
 
