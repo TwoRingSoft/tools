@@ -22,6 +22,7 @@ parser = OptionParser.new do |opts|
   opts.on('-n', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
   opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
+  opts.on('-cCHANGELOG_PATH', '--changelog-path=CHANGELOG_PATH', 'By default, release-podspec looks for //CHANGELOG.md. You can specify another location with this option.') do |changelog_path| options[:changelog_path] = changelog_path end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
@@ -29,20 +30,11 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-version_file = "#{podspec}.podspec"
-version = `vrsn --read --file #{version_file}`
-tag = String.new
-if options[:podspec_name_in_tag] then
-  tag = "#{podspec}-#{version.strip}"
-else
-  tag = version.strip
+changelog_path = 'CHANGELOG.md'
+if options[:changelog_path] != nil then
+  changelog_path = options[:changelog_path]
 end
-tag_command = "git tag #{tag}"
-puts tag_command
-stdout, stderr, status = Open3.capture3 tag_command
-if status != 0
-  fail 'Tag already exists.'
-end 
+echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} `vrsn --read --file tworingtools.gemspec`"
 echo_and_exec 'git push --tags'
 
 spec_lint_flags = Array.new 
@@ -58,7 +50,7 @@ end
 
 command = String.new
 if options[:repo] != nil then
-	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{podspec}.podspec #{spec_lint_flags.join ' '}"
+	command = "rbenv exec bundle exec pod repo push #{options[:repo]} # #{spec_lint_flags.join ' '}"
 else
 	command = "rbenv exec bundle exec pod trunk push #{podspec}.podspec #{spec_lint_flags.join ' '}"
 end

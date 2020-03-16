@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.11.0] 2020-03-15
+
+## Added
+
+- `release-podspec` now uses `changetag` to create annotated release tags with CHANGELOG.md contents.
+
 ## [1.10.0] 2020-03-15
 
 ## Added
