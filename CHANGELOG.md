@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.10.0] 2020-03-15
+
+## Added
+
+- `clean-rc-tags` which deletes any release candidate tags leftover after prerelease testing.
+
 ## [1.9.2] 2020-03-10
 
 ### Fixed

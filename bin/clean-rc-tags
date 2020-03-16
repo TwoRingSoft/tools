@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Deletes any release candidate tags leftover after prerelease testing.
+
+git tag --list | grep '\-RC[0-9]\+' | xargs -I @ bash -c "git tag --delete @ && git push --delete origin @"
