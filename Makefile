@@ -1,5 +1,7 @@
 init:
-	rbenv exec bundle update
+	brew bundle
+	rbenv install --skip-existing
+	rbenv exec bundle
 
 version:
 	rbenv exec bundle exec bumpr $(COMPONENT) tworingtools.gemspec
@@ -15,4 +17,3 @@ release:
 	git push --tags
 	rbenv exec gem push tworingtools-`vrsn --read --file tworingtools.gemspec`.gem
 	git push
-	
