@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.12.0] 2020-03-20
+
+## Added
+
+- Options to use `changetag` in `prerelease-podspec` and to stay on the current git branch instead of creating a temporary new branch.
+
 ## [1.11.0] 2020-03-15
 
 ## Added
