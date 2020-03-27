@@ -28,7 +28,7 @@ GEM
     public_suffix (4.0.3)
     rack (2.2.2)
     thread_safe (0.3.6)
-    tworingtools (1.9.2)
+    tworingtools (1.13.0)
       github_api (~> 0.18)
       json (~> 2.1)
 
