@@ -16,16 +16,19 @@ parser = OptionParser.new do |opts|
            - "build" numeric build numbers
 
   BANNER
-  opts.on('-h', '--help', 'Print this help message.') do 
+  opts.on('-n', '--no-commit', 'Leave changes in the git working index instead of committing them.') do |no_commit| options[:no_commit] = true end
+  opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
   end
 end
 parser.parse!
 
-modified_file_count, stderr, status = Open3.capture3("git status --porcelain | egrep '^(M| M)' | wc -l")
-if modified_file_count.to_i > 0 then
-    echo_and_exec 'git stash'
+unless options[:no_commit] then
+  modified_file_count, stderr, status = Open3.capture3("git status --porcelain | egrep '^(M| M)' | wc -l")
+  if modified_file_count.to_i > 0 then
+      echo_and_exec 'git stash'
+  end
 end
 
 component = ARGV[0]
@@ -48,9 +51,11 @@ command = "vrsn #{argument} --file #{version_file}"
 puts command
 stdout, stderr, status = Open3.capture3(command)
 
-echo_and_exec "git add #{version_file}"
-echo_and_exec "git commit --message \"#{stdout}\""
+unless options[:no_commit] then
+  echo_and_exec "git add #{version_file}"
+  echo_and_exec "git commit --message \"#{stdout}\""
 
-if modified_file_count.to_i > 0 then
-    echo_and_exec "git stash pop"
+  if modified_file_count.to_i > 0 then
+      echo_and_exec "git stash pop"
+  end
 end

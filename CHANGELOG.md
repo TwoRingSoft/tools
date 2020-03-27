@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ---
 
+## [1.13.0] 2020-03-26
+
+## Added
+
+- `--no-commit` option to `bumpr` to avoid forming a git commit with changes.
+
 ## [1.12.0] 2020-03-20
 
 ## Added
