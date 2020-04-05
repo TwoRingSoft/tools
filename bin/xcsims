@@ -1,0 +1,103 @@
+#! /usr/bin/env ruby
+
+require 'json'
+require 'optparse'
+require_relative '../lib/echoexec'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: xcsim [options] <podspec-name>
+
+           Perform batch operations on iOS Simulators.
+
+    Options:
+
+  BANNER
+  opts.on('-s', '--shutdown', 'Shut down all simulators.') do |force| options[:shutdown] = true end
+  opts.on('-r', '--rebuild', 'Delete and recreate all available ') do |force| options[:rebuild] = true end
+  opts.on('-h', '--help', 'Print this help message.') do 
+    puts opts
+    exit
+  end
+end
+parser.parse!
+
+def perform_batch_operation operation
+  echo_and_exec "xcrun simctl list -j devices | jq '[.devices[]] | flatten | .[] | .udid' | xargs -t -I @ xcrun simctl #{operation} @"
+end
+
+def rebuild_simulators
+  # get the lists of device types and runtimes 
+  @device_types = JSON.parse(`xcrun simctl list -j devicetypes`)
+  @runtimes = JSON.parse(`xcrun simctl list -j runtimes`)
+
+  puts 'Deleting simulators...'
+  puts
+
+  echo_and_exec 'xcrun simctl delete unavailable'
+
+  # delete all simulators
+  perform_batch_operation "delete"
+
+  # sometimes simctl list misses some things
+  user = `whoami`.strip
+  simulator_dir = "/Users/#{user}/Library/Developer/CoreSimulator/Devices"
+  leftover_simulators = Dir.entries(simulator_dir).select do |child| 
+    child != '.' && child != '..' && File.directory?(simulator_dir + '/' + child)
+  end
+  if leftover_simulators.count > 0 then
+    puts
+    puts "The following were not removed by simctl, consider manually deleting:"
+    puts
+    puts leftover_simulators.map {|dir| simulator_dir + '/' + dir}
+  end
+
+  puts
+  puts 'Creating simulators...'
+  puts
+
+  # given a runtime keyword (e.g. 'iphone') and a set of device type keywords (e.g. 'ios'), find all runtimes matching the runtime keyword, and all device types that match one of the device type keywords, take the cartesian product of runtimes and device types and create a simulator for each entry in that product
+  def create_simulators runtime_keyword, device_type_keywords
+    selected_runtimes = @runtimes['runtimes'].select do |runtime| 
+      runtime['name'].downcase.include?(runtime_keyword)
+    end
+    selected_device_types = @device_types['devicetypes'].select do |device_type| 
+      device_type_keywords.select do |keyword| 
+        device_type['name'].downcase.include?(keyword)
+      end.size > 0
+    end
+    selected_runtimes.product(selected_device_types).each do |runtime_device_type_pair_array|
+      runtime = runtime_device_type_pair_array.first
+      device_type = runtime_device_type_pair_array.last
+      create_command = "xcrun simctl create '#{device_type['name']}' #{device_type['identifier']} #{runtime['identifier']}"
+      puts create_command
+      `#{create_command}`
+    end
+  end
+
+  # create simulators for each runtime/device relationship
+  create_simulators 'ios', ['iphone', 'ipad']
+  create_simulators 'tv', ['tv']
+  create_simulators 'watch', ['watch']
+
+  puts
+  puts 'Summary:'
+  puts
+
+  # print summary
+  list_command = 'xcrun simctl list devices'
+  puts list_command
+  puts `#{list_command}`
+end
+
+def shut_down_simulators
+  perform_batch_operation "shutdown"
+end
+
+if options[:shutdown] then
+  shut_down_simulators
+elsif options[:rebuild] then
+  rebuild_simulators
+end

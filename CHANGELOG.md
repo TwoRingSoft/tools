@@ -1,6 +1,6 @@
 # Changelog
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
@@ -8,11 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Changed
 
-### Added
-
-### Fixed
-
----
+- Renamed `rebuild-sims` to `xcsims` and made rebuilding an option `-r/--rebuild`. Added an option to shut down all simulators: `-s/--shutdown`.
 
 ## [1.13.0] 2020-03-26
 

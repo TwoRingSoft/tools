@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '1.13.0'
-  s.date        = '2020-03-26'
+  s.version     = '2.0.0'
+  s.date        = '2020-04-04'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
-  - rebuild-sims: Delete all simulators and recreate one for each compatible platform and device type pairing.
+  - xcsims: Delete all simulators and recreate one for each compatible platform and device type pairing.
   - sync-forks: Make sure all your GitHub forks are clones into a given directory, and have “upstream” remotes pointing to the repos that were forked.
   - changetag: Extract changelog entries to write into git tag annotation messages.
   - prerelease-podspec: Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   ]
   s.executables = [
     'clean-rc-tags',
-    'rebuild-sims',
+    'xcsims',
     'sync-forks',
     'changetag',
     'prerelease-podspec',
