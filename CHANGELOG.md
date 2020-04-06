@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Renamed `rebuild-sims` to `xcsims` and made rebuilding an option `-r/--rebuild`. Added an option to shut down all simulators: `-s/--shutdown`.
 
+### Added
+
+- For a changelog adhering to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), introduce a tool `migrate-changelog` to move any contents under Unreleased to a new section for a new version with the current date.
+
 ## [1.13.0] 2020-03-26
 
 ## Added

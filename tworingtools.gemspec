@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   - revert-failed-release-tag: In case `release-podspec` fails, make sure the tag it may have created/pushed is destroyed before trying to run it again after fixing, so it doesn't break due to the tag already existing the second time around.
   - bumpr: Increment the desired part of a version number (major/minor/patch/build) and write the change to a git commit.
   - clean-rc-tags: deletes any release candidate tags leftover after prerelease testing.
+  - migrate-changelog: for a changelog adhering to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), move any contents under Unreleased to a new section for a new version with the current date.
   DESC
   s.authors     = ['Andrew McKnight']
   s.email       = 'andrew@tworingsoft.com'

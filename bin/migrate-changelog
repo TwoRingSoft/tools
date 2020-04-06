@@ -1,0 +1,38 @@
+#! /usr/bin/env ruby
+
+require 'open3'
+require 'optparse'
+require_relative '../lib/echoexec'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: migrate-changelog /path/to/../CHANGELOG.md <version>
+
+           Move any contents in Unreleased under a new heading for the specified version with current date.
+
+  BANNER
+  opts.on('-h', '--help', 'Print this help message.') do
+    puts opts
+    exit
+  end
+end
+parser.parse!
+
+changelog_path = ARGV[0]
+version = ARGV[1]
+
+new_entry = "\n\#\# [#{version}] #{Time.now.strftime("%Y-%m-%d")}\n"
+
+# read in the changelog file contents
+changelog_contents = File.open(changelog_path).readlines
+
+# insert the new version heading
+unreleased_index = changelog_contents.find_index("## [Unreleased]\n")
+changelog_contents.insert(unreleased_index + 1, new_entry)
+
+# write the updated changlog
+File.open(changelog_path, 'w+') do |writable_changelog|
+	writable_changelog << changelog_contents.join('')
+end
