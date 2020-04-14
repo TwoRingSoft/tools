@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - `update-all-usages` will `find` all Gemfiles with a certain gem name and under a certain directory update it wherever it's found.
 
+### Fixed
+
+- Remove `#` from podspec push command in `release-podspec`
+- Fixed the entry for 2.0.0 in this changelog.
+
 ## [2.0.0] 2020-04-14
 
 ### Changed
