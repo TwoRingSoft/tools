@@ -6,16 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- `update-all-usages` will `find` all Gemfiles with a certain gem name and under a certain directory update it wherever it's found.
+
 ## [2.0.0] 2020-04-14
-
-
-### Fixed
-
-- Invocation to `changetag` that wrongly referenced this project's gemspec file for a version. Didn't change it after testing on this project.
-- Added missing entry for `migrate-changelog` in gemspec `executables` list.
-- Stash/pop in `migrate-changelog`.
-
-## [2.0.0] 2020-04-05
 
 ### Changed
 
@@ -24,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Added
 
 - For a changelog adhering to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), introduce a tool `migrate-changelog` to move any contents under Unreleased to a new section for a new version with the current date.
+
+### Fixed
+
+- Invocation to `changetag` that wrongly referenced this project's gemspec file for a version in `release-podspec`. Didn't change it after testing on this project.
 
 ## [1.13.0] 2020-03-26
 
