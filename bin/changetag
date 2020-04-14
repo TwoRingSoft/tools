@@ -41,16 +41,9 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-# check for a valid git message comment character
+# set valid git message comment character
 
-comment_char = `git config --get core.commentchar`.strip
-if comment_char == '' or comment_char == '#' then
-  puts 'Your git comment character is still set to ‘#’. You need to change it to another character before using changetag. For instance:'
-  puts
-  puts "\tgit config core.commentchar '@'"
-  puts
-  exit ILLEGAL_COMMENT_CHAR
-end
+echo_and_exec "git config core.commentchar '@'"
 
 # get the changelog entry contents
 

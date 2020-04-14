@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Fixed
 
 - Invocation of `changetag` in `release-podspec`.
+- Always set git commit comment character to `@` in `changetag`.
 
 ## [2.0.1] 2020-04-14
 
