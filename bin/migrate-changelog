@@ -24,6 +24,8 @@ version = ARGV[1]
 
 new_entry = "\n\#\# [#{version}] #{Time.now.strftime("%Y-%m-%d")}\n"
 
+`git stash`
+
 # read in the changelog file contents
 changelog_contents = File.open(changelog_path).readlines
 
@@ -35,3 +37,7 @@ changelog_contents.insert(unreleased_index + 1, new_entry)
 File.open(changelog_path, 'w+') do |writable_changelog|
 	writable_changelog << changelog_contents.join('')
 end
+
+`git add #{changelog_path}`
+`git commit --message "chore(changelog): moved Unreleased entries to #{version}"`
+`git stash pop`
