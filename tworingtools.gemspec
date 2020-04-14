@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
     'prerelease-podspec',
     'release-podspec',
     'revert-failed-release-tag',
-    'bumpr'
+    'bumpr',
+    'migrate-changelog',
   ]
   s.homepage    = 'https://github.com/TwoRingSoft/tools'
   s.license     = 'MIT'
