@@ -5,6 +5,7 @@ init:
 
 version:
 	rbenv exec bundle exec bumpr $(COMPONENT) tworingtools.gemspec
+	rbenv exec bundle exec migrate-changelog CHANGELOG.md `vrsn --read --file tworingtools.gemspec`
 
 build:
 	gem build tworingtools.gemspec
