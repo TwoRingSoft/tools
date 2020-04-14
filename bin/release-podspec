@@ -34,7 +34,7 @@ changelog_path = 'CHANGELOG.md'
 if options[:changelog_path] != nil then
   changelog_path = options[:changelog_path]
 end
-echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} `vrsn --read --file tworingtools.gemspec`"
+echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} `vrsn --read --file #{podspec}.podspec`"
 echo_and_exec 'git push --tags'
 
 spec_lint_flags = Array.new 

@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+
+### Fixed
+
+- Invocation to `changetag` that wrongly referenced this project's gemspec file for a version. Didn't change it after testing on this project.
+
 ## [2.0.0] 2020-04-05
 
 ### Changed
