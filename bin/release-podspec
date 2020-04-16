@@ -23,6 +23,7 @@ parser = OptionParser.new do |opts|
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
   opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
   opts.on('-cCHANGELOG_PATH', '--changelog-path=CHANGELOG_PATH', 'By default, release-podspec looks for //CHANGELOG.md. You can specify another location with this option.') do |changelog_path| options[:changelog_path] = changelog_path end
+  opts.on('--e', '--changelog-entry=CHANGELOG_ENTRY', 'The name of the changelog entry, if it differs from the tag name.') do |changelog_entry_name_override| options[:changelog_entry_name_override] = changelog_path end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
@@ -39,7 +40,11 @@ name_prefix = String.new
 if options[:podspec_name_in_tag] then
   name_prefix = podspec + '-'
 end
-echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} #{name_prefix}#{version} "
+changelog_entry_name = String.new
+if options[:changelog_entry_name_override] != nil then
+  changelog_entry_name = "--name " + options[:changelog_entry_name_override]
+end
+echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} #{name_prefix}#{version} #{changelog_entry_name}"
 echo_and_exec 'git push --tags'
 
 spec_lint_flags = Array.new 

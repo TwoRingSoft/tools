@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- Option `--changelog-entry` on `release-podspec` to provide a name for the changelog entry if it's different than the tag name.
+
 ## [2.0.3] 2020-04-15
 
 ### Fixed
