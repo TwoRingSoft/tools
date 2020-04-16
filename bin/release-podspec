@@ -23,7 +23,7 @@ parser = OptionParser.new do |opts|
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
   opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
   opts.on('-cCHANGELOG_PATH', '--changelog-path=CHANGELOG_PATH', 'By default, release-podspec looks for //CHANGELOG.md. You can specify another location with this option.') do |changelog_path| options[:changelog_path] = changelog_path end
-  opts.on('--e', '--changelog-entry=CHANGELOG_ENTRY', 'The name of the changelog entry, if it differs from the tag name.') do |changelog_entry_name_override| options[:changelog_entry_name_override] = changelog_path end
+  opts.on('--e', '--changelog-entry=CHANGELOG_ENTRY', 'The name of the changelog entry, if it differs from the tag name.') do |changelog_entry_name_override| options[:changelog_entry_name_override] = true end
   opts.on('-h', '--help', 'Print this help message.') do 
     puts opts
     exit
