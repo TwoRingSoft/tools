@@ -35,7 +35,11 @@ if options[:changelog_path] != nil then
   changelog_path = options[:changelog_path]
 end
 version = `vrsn --read --file #{podspec}.podspec`
-echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} #{version}"
+name_prefix = String.new
+if options[:podspec_name_in_tag] then
+  name_prefix = podspec + '-'
+end
+echo_and_exec "rbenv exec bundle exec changetag #{changelog_path} #{name_prefix}#{version} "
 echo_and_exec 'git push --tags'
 
 spec_lint_flags = Array.new 
