@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix bug when trying to use `release-podspec`'s `--changelog-path` option.
+
 ## [2.1.0] 2020-04-15
 
 ### Added
