@@ -1,14 +1,6 @@
 # tools
 
-A collection of scripts and tools to help with software development.
-
-- `rebuild-sims`: Delete all  simulators and recreate one for each compatible platform and device type pairing.
-- `sync-forks`: Make sure all your GitHub forks are clones into a given directory, and have “upstream” remotes pointing to the repos that were forked.
-- `changetag`: Extract changelog entries to write into git tag annotation messages.
-- `prerelease-podspec`: Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
-- `release-podspec`: Create a tag with the version and push it to repo origin, push podspec to CocoaPods trunk.
-- `revert-failed-release-tag`: In case `release-podspec` fails, make sure the tag it may have created/pushed is destroyed before trying to run it again after fixing, so it doesn't break due to the tag already existing the second time around.
-- `bumpr`: Increment the desired part of a version number (major/minor/patch/build) and write the change to a git commit.
+A collection of scripts and tools to help with software development. Each executable in `bin/` can be run with `-h/--help` for information.
 
 # Installation
 
@@ -57,5 +49,3 @@ You should then have all the tools available in your `PATH`.
 Issues and pull requests are welcome! 
 
 If this project helped you, please consider <a href="https://www.paypal.me/armcknight">leaving a tip</a> 🤗
-
-Do you need help with a project? [I'm currently available for hire or contract.](http://tworingsoft.com/contracts).
