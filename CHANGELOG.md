@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## Changed
+
+- Scripts no longer try to stash/pop git index changes, they will now just fail.
+
 ## [2.1.1] 2020-04-16
 
 ### Fixed

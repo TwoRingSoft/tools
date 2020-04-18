@@ -1,8 +1,9 @@
 #! /usr/bin/env ruby
 
-require 'open3'
 require 'optparse'
 require_relative '../lib/echoexec'
+require_relative '../lib/error'
+require_relative '../lib/git_check'
 
 options = {}
 parser = OptionParser.new do |opts|
@@ -24,12 +25,7 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-unless options[:no_commit] then
-  modified_file_count, stderr, status = Open3.capture3("git status --porcelain | egrep '^(M| M)' | wc -l")
-  if modified_file_count.to_i > 0 then
-      echo_and_exec 'git stash'
-  end
-end
+git_check
 
 component = ARGV[0]
 version_file = ARGV[1]
@@ -44,7 +40,7 @@ argument = {
 
 if argument == nil then
   puts 'Unrecognized version component.'
-  exit 1
+  exit TwoRingToolError::INVALID_SEMVER_COMPONENT
 end
 
 command = "vrsn #{argument} --file #{version_file}"
@@ -54,8 +50,4 @@ stdout, stderr, status = Open3.capture3(command)
 unless options[:no_commit] then
   echo_and_exec "git add #{version_file}"
   echo_and_exec "git commit --message \"#{stdout}\""
-
-  if modified_file_count.to_i > 0 then
-      echo_and_exec "git stash pop"
-  end
 end

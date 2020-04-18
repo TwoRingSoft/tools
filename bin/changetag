@@ -2,12 +2,8 @@
 
 require 'optparse'
 require_relative '../lib/echoexec'
-
-# failure modes
-ILLEGAL_COMMENT_CHAR = 65
-INVALID_CHANGELOG_PATH = 66
-UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT = 67
-CHANGELOG_ENTRY_NOT_FOUND = 68
+require_relative '../lib/error'
+require_relative '../lib/git_check'
 
 options = {}
 parser = OptionParser.new do |opts|
@@ -41,6 +37,8 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
+git_check
+
 # set valid git message comment character
 
 echo_and_exec "git config core.commentchar '@'"
@@ -50,7 +48,7 @@ echo_and_exec "git config core.commentchar '@'"
 changelog_path = ARGV[0]
 unless File.file?(changelog_path) then
   puts "The path '#{changelog_path}' does not point to a valid file."
-  exit INVALID_CHANGELOG_PATH
+  exit TwoRingToolError::INVALID_CHANGELOG_PATH
 end
 
 git_tag = ARGV[1]
@@ -58,7 +56,7 @@ current_git_tag_annotation = `git tag -n #{git_tag}`.strip
 git_tag_exists = current_git_tag_annotation != ''
 if git_tag_exists and current_git_tag_annotation != git_tag and options[:force] != true then
   puts "The tag #{git_tag} already has an annotation. To overwrite it, call changetag with the -f/--force option."
-  exit UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT
+  exit TwoRingToolError::UNFORCED_ANNOTATION_OVERWRITE_ATTEMPT
 end
 
 # Extract the relevant section from the changelog, which should have the following format: (square brackets should be present, chevrons are to denote content descriptions)
@@ -92,7 +90,7 @@ end
 
 if entry_start_idx == -1 then
   puts "Could not find an entry in the changelog named '#{entry_name}'."
-  exit CHANGELOG_ENTRY_NOT_FOUND
+  exit TwoRingToolError::CHANGELOG_ENTRY_NOT_FOUND
 end
 
 entry_end_idx = -1

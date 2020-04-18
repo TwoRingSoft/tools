@@ -2,6 +2,7 @@
 
 require 'open3'
 require 'optparse'
+require_relative '../lib/git_check'
 require_relative '../lib/echoexec'
 
 podspec = ARGV[0]
@@ -31,6 +32,8 @@ parser = OptionParser.new do |opts|
   end
 end
 parser.parse!
+
+git_check
 
 version_file = "#{podspec}.podspec"
 

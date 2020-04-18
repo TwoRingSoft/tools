@@ -2,6 +2,7 @@
 
 require 'optparse'
 require_relative '../lib/echoexec'
+require_relative '../lib/git_check'
 
 options = {}
 parser = OptionParser.new do |opts|
@@ -19,12 +20,12 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
+git_check
+
 changelog_path = ARGV[0]
 version = ARGV[1]
 
 new_entry = "\n\#\# [#{version}] #{Time.now.strftime("%Y-%m-%d")}\n"
-
-`git stash`
 
 # read in the changelog file contents
 changelog_contents = File.open(changelog_path).readlines
@@ -40,4 +41,3 @@ end
 
 `git add #{changelog_path}`
 `git commit --message "chore(changelog): moved Unreleased entries to #{version}"`
-`git stash pop`

@@ -3,6 +3,8 @@
 require 'open3'
 require 'optparse'
 require_relative '../lib/echoexec'
+require_relative '../lib/errors'
+require_relative '../lib/git_check'
 
 podspec = ARGV[0]
 
@@ -30,6 +32,8 @@ parser = OptionParser.new do |opts|
   end
 end
 parser.parse!
+
+git_check
 
 changelog_path = 'CHANGELOG.md'
 if options[:changelog_path] != nil then
@@ -72,7 +76,7 @@ puts stdout
 
 if status != 0 then
   puts "Podspec push failed:\nstderr: #{stderr}"
-  exit 1
+  exit TwoRingToolError::PODSPEC_PUSH_FAILED
 else
   puts "Podspec pushed successfully!"
 end
