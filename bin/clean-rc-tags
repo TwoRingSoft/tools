@@ -1,5 +1,5 @@
-#!/bin/sh
+#! /usr/bin/env ruby
 #
 # Deletes any release candidate tags leftover after prerelease testing.
 
-git tag --list | grep '\-RC[0-9]\+' | xargs -I @ bash -c "git tag --delete @ && git push --delete origin @"
+`git tag --list | grep '\\\-RC[0-9]\\\+' | xargs -tI @ bash -c "git tag --delete @ && git push --delete origin @"`
