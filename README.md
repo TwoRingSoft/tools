@@ -35,14 +35,27 @@ You should then have all the tools available in your `PATH`.
 ## `sync-forks`
 
 - `--upstream-sync`: fetch upstream's default branch, try to apply new commits to local default branch using `--ff-only` and push to forks' remotes
-- `--tags`: download tags from upstreams
+- `--tags`: download tags from upstreams, and maybe push to forks
 - `--repo`: only sync the repo name provided
-- `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “origin” and one exists for the original repo's remote named “upstream”
+- `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “fork” and one exists for the original repo's remote named “upstream”
 - `--prune`: delete any repositories not found in the forks list received from GitHub api
 
 ## `changetag`
 
-- Post extracted changelog entries to GitHub/GitLab/etc release notes for tags. This will cause them to actually be rendered with markdown, whereas the tag annotation messages are not. May need to rename from `changetag` to something more appropriate, or create a different tool to do this part.
+- Post extracted changelog entries to GitHub/GitLab/etc release notes for tags using their API. This will cause them to actually be rendered with markdown, whereas the tag annotation messages are not. May need to rename from `changetag` to something more appropriate, or create a different tool to do this part.
+
+## `prerelease-podspec`/`release-podspec`
+
+- generalize to other types of dependency specs, rename to [`pre`]`release-spec`
+
+## `update-all-usages`
+
+- finish implementation
+- compile results of all updates into digestible format
+
+## `revert-failed-release-tag`
+
+- generalize to other types of dependency specs
 
 # Contribute
 
