@@ -2,7 +2,7 @@
 
 require 'optparse'
 require_relative '../lib/echoexec'
-require_relative '../lib/error'
+require_relative '../lib/errors'
 require_relative '../lib/git_check'
 
 options = {}
