@@ -15,7 +15,7 @@ parser = OptionParser.new do |opts|
 
            For normal usage, provide the path to the changelog from which to extract release notes, and the git tag name for which you'd like to extract release notes. This pulls the relevant section from your changelog, as long as you adhere to the format described at http://keepachangelog.com/en/1.0.0/.
 
-           Note that the specification requires using the '#' character for hierarchical organization. Conveniently, this also renders different header styles with markdown. Unfortunately, that character is used to denote comments in git tag annotations (similar to git commit messages). So, before using changetag, you must change this to a different character: 
+           Note that the specification requires using the '#' character for hierarchical organization. Conveniently, this also renders different header styles with markdown. Unfortunately, that character is used to denote comments in git tag annotations (similar to git commit messages). So, before using changetag, you must change this to a different character:
 
                 $> git config core.commentchar "@"
 
@@ -73,9 +73,9 @@ end
 =end
 
 changelog_contents = File.open(changelog_path).readlines
-if options[:name] != nil then 
+if options[:name] != nil then
   entry_name = options[:name]
-else 
+else
   entry_name = git_tag
 end
 
