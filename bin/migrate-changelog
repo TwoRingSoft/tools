@@ -20,7 +20,7 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-git_check
+git_check unless options[:no_commit]
 
 changelog_path = ARGV[0]
 version = ARGV[1]

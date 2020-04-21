@@ -33,7 +33,7 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-git_check
+git_check unless options[:no_commit]
 
 version_file = "#{podspec}.podspec"
 
