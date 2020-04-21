@@ -17,7 +17,9 @@ Gem::Specification.new do |s|
   s.authors     = ['Andrew McKnight']
   s.email       = 'andrew@tworingsoft.com'
   s.files       = [
-    'lib/echoexec.rb'
+    'lib/echoexec.rb',
+    'lib/errors.rb',
+    'lib/git_check.rb',
   ]
   s.executables = [
     'clean-rc-tags',
