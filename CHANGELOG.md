@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixes
+
+- Update dependency on `github_api` to 0.19 so the transitive dependency on `faraday` stays compatible with Fastlane's dependency on it, as it has changed to 1.0.
+
 ## [3.0.1] 2020-04-20
 
 ### Fixes
