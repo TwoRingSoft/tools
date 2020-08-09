@@ -23,6 +23,7 @@ parser = OptionParser.new do |opts|
   BANNER
   opts.on('-w', '--allow-warnings', 'Pass \'--allow-warnings\' to \'cocoapods spec lint\'.') do |force| options[:allow_warnings] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
+  opts.on('-s', '--skip-tests', 'Pass \'--skip-tests\' to \'cocoapods spec lint\'.') do |skip_tests| options[:skip_tests] = true end
   opts.on('-n', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-n', '--no-branch', 'Make any changes on the current branch instead of creating a temporary new branch.') do |no_branch| options[:no_branch] = true end
   opts.on('-cCHANGELOG', '--changelog=CHANGELOG', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate.') do |changelog| options[:changelog] = changelog end
@@ -74,6 +75,9 @@ if options[:allow_warnings] != nil then
 end
 if options[:verbose] != nil then
   spec_lint_flags << '--verbose'
+end
+if options[:skip_tests] != nil then
+  spec_lint_flags << '--skip-tests'
 end
 stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
 
