@@ -1,7 +1,7 @@
 init:
 	brew bundle
 	rbenv install --skip-existing
-	rbenv exec bundle
+	rbenv exec bundle update
 
 version:
 	rbenv exec bundle exec bumpr $(COMPONENT) tworingtools.gemspec
