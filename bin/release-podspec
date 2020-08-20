@@ -6,13 +6,14 @@ require_relative '../lib/echoexec'
 require_relative '../lib/errors'
 require_relative '../lib/git_check'
 
-podspec = ARGV[0]
+podspec_path = ARGV[0]
+podspec = podspec_path.split('/')[-1].split('.podspec')[0]
 
 options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
 
-    Usage: release-podspec [options] <podspec-name>
+    Usage: release-podspec [options] <podspec-path>
 
            Form Git tags and push them to remote, then push the podspec to CocoaPods trunk.
 
@@ -39,7 +40,7 @@ changelog_path = 'CHANGELOG.md'
 if options[:changelog_path] != nil then
   changelog_path = options[:changelog_path]
 end
-version = `vrsn --read --file #{podspec}.podspec`.strip
+version = `vrsn --read --file #{podspec_path}`.strip
 name_prefix = String.new
 if options[:podspec_name_in_tag] then
   name_prefix = podspec + '-'
@@ -66,7 +67,7 @@ command = String.new
 if options[:repo] != nil then
 	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{spec_lint_flags.join ' '}"
 else
-	command = "rbenv exec bundle exec pod trunk push #{podspec}.podspec #{spec_lint_flags.join ' '}"
+	command = "rbenv exec bundle exec pod trunk push #{podspec_path} #{spec_lint_flags.join ' '}"
 end
 
 puts command
