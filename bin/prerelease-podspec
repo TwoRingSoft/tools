@@ -5,7 +5,8 @@ require 'optparse'
 require_relative '../lib/git_check'
 require_relative '../lib/echoexec'
 
-podspec = ARGV[0]
+version_file = ARGV[0]
+podspec = version_file.split('/')[-1].split('.podspec')[0]
 
 # failure modes
 PODSPEC_FAILED_VALIDATION = 65
@@ -14,7 +15,7 @@ options = {}
 parser = OptionParser.new do |opts|
   opts.banner = <<~BANNER
 
-    Usage: prerelease-podspec [options] <podspec-name>
+    Usage: prerelease-podspec [options] <podspec-path>
 
            Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
 
@@ -34,8 +35,6 @@ end
 parser.parse!
 
 git_check unless options[:no_commit]
-
-version_file = "#{podspec}.podspec"
 
 current_version = `vrsn --read --file #{version_file}`.strip
 unless options[:no_branch] then
@@ -75,7 +74,7 @@ end
 if options[:verbose] != nil then
   spec_lint_flags << '--verbose'
 end
-stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{podspec}.podspec #{spec_lint_flags.join ' '}"
+stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{version_file} #{spec_lint_flags.join ' '}"
 
 puts "stdout: #{stdout}"
 
