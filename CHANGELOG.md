@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- 4.0.0 accidentally removed the feature added in 3.1.0. It has been replaced.
+
 ## [4.0.0] 2020-08-20
 
 ### Changed
