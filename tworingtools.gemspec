@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'tworingtools'
-  s.version     = '3.1.0'
-  s.date        = '2020-04-20'
+  s.version     = '4.0.0'
+  s.date        = '2020-08-20'
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
   - xcsims: Delete all simulators and recreate one for each compatible platform and device type pairing.
