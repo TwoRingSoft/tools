@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.0.0] 2020-08-20
+
+### Changed
+
+- `prerelease-podspec` and `release-podspec` now accept the path to a podspec as their parameter, instead of the podspec name which would be used to construct the path always in the root directory. Sometimes the podspec isn't in the root!
+
 ## [3.1.0] 2020-08-09
 
 ### Added
