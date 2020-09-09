@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Option on `prerelease-podspec` and `release-podspec` to specify a custom tag value.
 
+### Fixed
+
+- The `--podspec-name-in-tag` option's short name in `prerelease-podspec` was copypasta'd from another option. Specified a unique one: `-p` and change the short name in `release-podspec` from `-n` to `-p` to match.
+
 ## [4.0.1] 2020-08-20
 
 ### Fixed
