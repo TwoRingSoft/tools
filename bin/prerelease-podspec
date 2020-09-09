@@ -28,6 +28,7 @@ parser = OptionParser.new do |opts|
   opts.on('-n', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-n', '--no-branch', 'Make any changes on the current branch instead of creating a temporary new branch.') do |no_branch| options[:no_branch] = true end
   opts.on('-cCHANGELOG', '--changelog=CHANGELOG', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate.') do |changelog| options[:changelog] = changelog end
+  opts.on('-tTAG', '--tag=TAG', 'Override for the name of the git tag to form. If set, --podspec-name-in-tag is ignored.') do |tag| options[:tag] = tag end
   opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
@@ -48,7 +49,9 @@ release_candidate_number = `git tag --list | grep #{version_root} | wc -l`.strip
 release_candidate_version = "#{version_root}#{release_candidate_number}"
 
 tag_value = String.new
-if options[:podspec_name_in_tag] then
+if options[:tag] then
+  tag_value = options[:tag]
+elsif options[:podspec_name_in_tag] then
   tag_value = "#{podspec}-#{release_candidate_version}"
 else
   tag_value = "#{release_candidate_version}"
