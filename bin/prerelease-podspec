@@ -29,6 +29,7 @@ parser = OptionParser.new do |opts|
   opts.on('-n', '--no-branch', 'Make any changes on the current branch instead of creating a temporary new branch.') do |no_branch| options[:no_branch] = true end
   opts.on('-cCHANGELOG', '--changelog=CHANGELOG', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate.') do |changelog| options[:changelog] = changelog end
   opts.on('-tTAG', '--tag=TAG', 'Override for the name of the git tag to form. If set, --podspec-name-in-tag is ignored.') do |tag| options[:tag] = tag end
+  opts.on('-rRC', '--release-candidate=RC', 'Override for the release candidate number, which is otherwise formulated by counting the previous amount of tags with the same version number and incrementing by one.') do |rc| options[:rc] = rc end
   opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
@@ -45,7 +46,12 @@ unless options[:no_branch] then
 end
 
 version_root = "#{current_version}-RC"
-release_candidate_number = `git tag --list | grep #{version_root} | wc -l`.strip.to_i + 1
+release_candidate_number = String.new
+if options[:rc] then
+  release_candidate_number = options[:rc]
+else
+  release_candidate_number = `git tag --list | grep #{version_root} | wc -l`.strip.to_i + 1
+end
 release_candidate_version = "#{version_root}#{release_candidate_number}"
 
 tag_value = String.new
