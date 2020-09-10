@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- `release-podspec` now provides the full path to the podspec being released in the case where `--repo` is specified, instead of a push to CococaPods trunk.
+
 ## [4.3.0] 2020-09-10
 
 ### Added

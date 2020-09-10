@@ -75,7 +75,7 @@ end
 
 command = String.new
 if options[:repo] != nil then
-	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{spec_lint_flags.join ' '}"
+	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{spec_lint_flags.join ' '} #{podspec_path}"
 else
 	command = "rbenv exec bundle exec pod trunk push #{podspec_path} #{spec_lint_flags.join ' '}"
 end
