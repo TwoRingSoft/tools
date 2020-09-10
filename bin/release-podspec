@@ -51,7 +51,7 @@ elsif options[:podspec_name_in_tag] then
 else
   tag_value = version
 end
-if options[:skip_changelog] then
+unless options[:skip_changelog] then
   changelog_entry_name = String.new
   if options[:changelog_entry_name_override] != nil then
     changelog_entry_name = "--name " + options[:changelog_entry_name_override]
