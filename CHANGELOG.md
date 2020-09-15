@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.4.2] 2020-09-15
+
 ### Fixed
 
 - Revert change introduced in 4.4.1.
