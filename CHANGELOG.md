@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.4.0] 2020-09-14
+
 ### Added
 
 - Option on `prerelease-podspec` to skip creating git tags, for situations where it might be called multiple times for different variants on a release candidate.
