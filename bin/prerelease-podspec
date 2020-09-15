@@ -27,8 +27,9 @@ parser = OptionParser.new do |opts|
   opts.on('-s', '--skip-tests', 'Pass \'--skip-tests\' to \'cocoapods spec lint\'.') do |skip_tests| options[:skip_tests] = true end
   opts.on('-p', '--podspec-name-in-tag', 'When forming the tag name for a release candidate, prefix the podspec‘s name to the version string. Helps when you have multiple podspecs in a repository and tag versions for each.') do |podspec_name_in_tag| options[:podspec_name_in_tag] = true end
   opts.on('-n', '--no-branch', 'Make any changes on the current branch instead of creating a temporary new branch.') do |no_branch| options[:no_branch] = true end
-  opts.on('-cCHANGELOG', '--changelog=CHANGELOG', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate.') do |changelog| options[:changelog] = changelog end
+  opts.on('-cCHANGELOG', '--changelog=CHANGELOG', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate. Ignored if --no-tag is specified.') do |changelog| options[:changelog] = changelog end
   opts.on('-tTAG', '--tag=TAG', 'Override for the name of the git tag to form. If set, --podspec-name-in-tag is ignored.') do |tag| options[:tag] = tag end
+  opts.on('-t', '--no-tag', 'Don\'t create a git tag to push. Usually used if this will be invoked again for another spec that will create and use the same tag.') do |no_tag| options[:no_tag] = true end
   opts.on('-rRC', '--release-candidate=RC', 'Override for the release candidate number, which is otherwise formulated by counting the previous amount of tags with the same version number and incrementing by one.') do |rc| options[:rc] = rc end
   opts.on('-h', '--help', 'Print this help message.') do
     puts opts
@@ -67,14 +68,16 @@ echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{release_candidate_
 echo_and_exec "git add #{version_file}"
 echo_and_exec "git commit --message 'chore(#{podspec}): set to release candidate version'"
 
-if options[:changelog] then
-  echo_and_exec 'git config core.commentchar @'
-  echo_and_exec "rbenv exec bundle exec changetag --name #{current_version} #{options[:changelog]} #{tag_value}"
-  echo_and_exec 'git config core.commentchar #'
-else
-  echo_and_exec "git tag #{tag_value}"
+unless options[:no_tag] then
+  if options[:changelog] then
+    echo_and_exec 'git config core.commentchar @'
+    echo_and_exec "rbenv exec bundle exec changetag --name #{current_version} #{options[:changelog]} #{tag_value}"
+    echo_and_exec 'git config core.commentchar #'
+  else
+    echo_and_exec "git tag #{tag_value}"
+  end
+  echo_and_exec 'git push --tags'
 end
-echo_and_exec 'git push --tags'
 
 puts "About to lint the podspec. This takes a while... (it is now #{Time.now})"
 spec_lint_flags = Array.new
