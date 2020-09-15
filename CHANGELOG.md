@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.4.1] 2020-09-15
+
 ### Fixed
 
 - Use the same value in a prerelease podspec version as will be used to form the git tag.
