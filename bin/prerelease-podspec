@@ -64,7 +64,7 @@ else
   tag_value = "#{release_candidate_version}"
 end
 
-echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{tag_value}\"\\'/g\" #{version_file}"
+echo_and_exec "sed -i '' \"s/\\(\\.version *= *'\\).*'/\\1\"#{release_candidate_version}\"\\'/g\" #{version_file}"
 echo_and_exec "git add #{version_file}"
 echo_and_exec "git commit --message 'chore(#{podspec}): set to release candidate version'"
 
