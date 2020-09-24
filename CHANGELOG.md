@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.5.1] 2020-09-24
+
 ### Fixed
 
 - `--custom` flag's value was not properly marshalled.
