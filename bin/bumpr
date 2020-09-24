@@ -18,7 +18,7 @@ parser = OptionParser.new do |opts|
 
   BANNER
   opts.on('-n', '--no-commit', 'Leave changes in the git working index instead of committing them.') do |no_commit| options[:no_commit] = true end
-  opts.on('-c', '--custom', 'Custom version to use for semantic component (or build number for "build" component).') do |custom| options[:custom] = custom end
+  opts.on('-cCUSTOM', '--custom=CUSTOM', 'Custom version to use for semantic component (or build number for "build" component).') do |custom| options[:custom] = custom end
   opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
