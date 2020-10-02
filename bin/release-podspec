@@ -64,13 +64,13 @@ end
 echo_and_exec 'git push --tags'
 
 spec_lint_flags = Array.new
-if options[:allow_warnings] != nil then
+if options[:allow_warnings] then
   spec_lint_flags << '--allow-warnings'
 end
-if options[:verbose] != nil then
+if options[:verbose] then
   spec_lint_flags << '--verbose'
 end
-if options[:skip_tests] != nil then
+if options[:skip_tests] then
   spec_lint_flags << '--skip-tests'
 end
 if options[:skip_import_validation] then
