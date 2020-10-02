@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.6.0] 2020-10-02
+
 ### Added
 
 - `--quick` flag for `prerelease-podspec` and `--skip-import-validation` flag for `release-podspec` to pass through to `pod spec lint` and `pod trunk push`/`pod repo push`, respectively.
