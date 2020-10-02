@@ -37,7 +37,7 @@ parser = OptionParser.new do |opts|
 end
 parser.parse!
 
-git_check unless options[:no_commit]
+git_check
 
 # set valid git message comment character
 
