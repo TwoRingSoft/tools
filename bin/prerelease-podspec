@@ -31,6 +31,7 @@ parser = OptionParser.new do |opts|
   opts.on('-tTAG', '--tag=TAG', 'Override for the name of the git tag to form. If set, --podspec-name-in-tag is ignored.') do |tag| options[:tag] = tag end
   opts.on('-t', '--no-tag', 'Don\'t create a git tag to push. Usually used if this will be invoked again for another spec that will create and use the same tag.') do |no_tag| options[:no_tag] = true end
   opts.on('-rRC', '--release-candidate=RC', 'Override for the release candidate number, which is otherwise formulated by counting the previous amount of tags with the same version number and incrementing by one.') do |rc| options[:rc] = rc end
+  opts.on('-q', '--quick', 'Perform quick podspec lint only.') do |quick| options[:quick] = true end
   opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
@@ -89,6 +90,9 @@ if options[:verbose] != nil then
 end
 if options[:skip_tests] != nil then
   spec_lint_flags << '--skip-tests'
+end
+if options[:quick] then
+  spec_lint_flags << '--quick'
 end
 stdout, stderr, status = Open3.capture3 "rbenv exec bundle exec pod spec lint #{version_file} #{spec_lint_flags.join ' '}"
 
