@@ -13,7 +13,8 @@ parser = OptionParser.new do |opts|
            Move any contents in Unreleased under a new heading for the specified version with current date.
 
   BANNER
-  opts.on('-h', '--help', 'Print this help message.') do
+    opts.on('-n', '--no-commit', 'Leave changes in the git working index instead of committing them.') do |no_commit| options[:no_commit] = true end
+    opts.on('-h', '--help', 'Print this help message.') do
     puts opts
     exit
   end
@@ -39,5 +40,7 @@ File.open(changelog_path, 'w+') do |writable_changelog|
 	writable_changelog << changelog_contents.join('')
 end
 
-`git add #{changelog_path}`
-`git commit --message "chore(changelog): moved Unreleased entries to #{version}"`
+unless options[:no_commit] then
+  `git add #{changelog_path}`
+  `git commit --message "chore(changelog): moved Unreleased entries to #{version}"`
+end
