@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [4.7.0] 2020-10-24
+
 ### Added
 
 - `--no-commit` option in `migrate-changelog`.
