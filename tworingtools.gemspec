@@ -34,6 +34,6 @@ Gem::Specification.new do |s|
   ]
   s.homepage    = 'https://github.com/TwoRingSoft/tools'
   s.license     = 'MIT'
-  s.add_runtime_dependency 'github_api', '~> 0.19'
+  s.add_runtime_dependency 'octokit', '~> 4.20.0'
   s.add_runtime_dependency 'json', '~> 2.1'
 end

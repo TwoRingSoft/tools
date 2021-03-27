@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-require 'github_api'
+require 'octokit'
 require 'json'
 require 'optparse'
 require_relative '../lib/echoexec'
@@ -42,23 +42,31 @@ parser = OptionParser.new do |opts|
   opts.on('-pPASSWORD', '--password=PASSWORD', 'GitHub password.') do |pass| options[:password] = pass end
   opts.on('-oOTP', '--one-time-pw=OTP', 'GitHub 2FA token, if you have it enabled.') do |otp| options[:otp] = otp end
   opts.on('-rREPO', '--repo-name=REPO', 'The name of a particular repository to sync.') do |repo| options[:repo] = repo end
+  opts.on('-v', '--verbose', 'Enable verbose logging.') do options[:verbose] = true end
 end
 parser.parse!
 root_dir_path = ARGV[0]
 
 # authenticate the github client, producing a token for callers to use if they try with user/pass, as that is rate limited
 github = nil
-if nil != options[:token] && nil != options[:username] then
-  github = Github.new oauth_token: options[:token]
+if nil != options[:token] then
+  github = Octokit::Client.new(:access_token => options[:token])
   puts 'Running with provided token...'
 elsif nil != options[:username] && nil != options[:password]
-  github = Github.new do |config|
-     config.basic_auth = "#{options[:username]}:#{options[:password]}"
-     if nil != options[:otp] then
-       config.connection_options = {headers: {"X-GitHub-OTP" => options[:otp]}}
-     end
+  github = Octokit::Client.new \
+    :login    => options[:username],
+    :password => options[:password]
+
+  headers = Hash.new
+  if nil != options[:otp] then
+    headers['X-GitHub-OTP'] = options[:otp]
   end
-  token = github.auth.create scopes: ['repo'], note: 'sync-forks'
+
+  token = github.create_authorization \
+    :scopes => ["user"],
+    :note => "sync-forks",
+    :headers => headers
+
   puts "Created new token, use it to call sync-forks again:"
   puts
   puts "\tsync-forks -u #{user} -t #{token.token}"
@@ -70,24 +78,27 @@ else
   exit MISSING_REQUIRED_CREDENTIALS
 end
 
+github.auto_paginate = true
+
+repos = github.repos
+
+# TODO: sync owned repos
+
 # get the list of forks to sync
-repos = github.repos.list user: options[:username], auto_pagination: true
 forks = repos.select {|x| x.fork}
 if options[:repo] != nil then
   forks.select! {|x| x.name == options[:repo]}
 end
 
 # sync ’em
-forks.each do |forked|
+forks.each do |forked_repo|
   puts '---'
 
-  # API spec: https://docs.github.com/en/rest/reference/repos#get-a-repository
-  info = github.repos.get(user: options[:username], repo: forked.name)
-
-  upstream_ssh_url = info.source.ssh_url
-  original_owner = info.source.owner.login
-  name = forked.name
-  fork_ssh_url = forked.ssh_url
+  forked_repo_info = github.repo(forked_repo.id)
+  upstream_ssh_url = forked_repo_info.source.ssh_url
+  original_owner = forked_repo_info.source.owner.login
+  name = forked_repo_info.name
+  fork_ssh_url = forked_repo_info.ssh_url
 
   upstream_origin_name = 'upstream'
   fork_origin_name = 'fork'
@@ -100,16 +111,20 @@ forks.each do |forked|
   end
 
   Dir.chdir path do
-    fork_default_branch_name = `git remote show #{fork_origin_name} | grep "HEAD branch" | cut -d ":" -f 2`
+    # if we just cloned the repo locally, set up both remotes
+    unless already_cloned then
+      echo_and_exec "git remote add #{upstream_origin_name} #{upstream_ssh_url}"
+      echo_and_exec "git remote rename origin #{fork_origin_name}"
+    end
+
+    # get the names of the default branches
+    fork_default_branch_name = `git remote show #{fork_origin_name} | grep "HEAD branch" | cut -d ":" -f 2`.strip
     fork_default_local_branch_name = "#{fork_origin_name}_#{fork_default_branch_name}"
     upstream_default_branch_name = `git remote show #{upstream_origin_name} | grep "HEAD branch" | cut -d ":" -f 2`
     upstream_default_local_branch_name = "#{upstream_origin_name}_#{upstream_default_branch_name}"
 
-    # if we just cloned the repo locally, set it up with both remotes and local default tracking branches
+    # if we just cloned the repo locally, set local default tracking branches
     unless already_cloned then
-      echo_and_exec "git remote add #{upstream_origin_name} #{upstream_ssh_url}"
-      echo_and_exec "git remote rename origin #{fork_origin_name}"
-
       # rename the cloned local default branch to reflect that it's tracking the fork remote's version
       echo_and_exec "git branch -m #{fork_default_branch_name} #{fork_default_local_branch_name}"
 
