@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [5.0.0] 2021-03-27
+
 ### Changed
 
 - Improved the functionality of `sync-git` and renamed it to `sync-git`:
