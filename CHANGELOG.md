@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- Improved the functionality of `sync-forks`:
+    - now it nests forks in subdirectories based on the original owners name, so if I fork octocat/Hello-World, octocat/Repo2 and someone/elses_repo, I'd have:
+    ```
+    forks/
+    ├── octocat/
+    |    ├── Hello-world/
+    |    └── Repo2
+    └── someone/
+        └── elses_repo/
+    ```
+    - rewritten using the officially supported [octokit](https://github.com/octokit/octokit.rb) ruby gem.
+
+A future release will rename this tool and sync all repos, not just forks.
+
+
 ## [4.7.0] 2020-10-24
 
 ### Added
