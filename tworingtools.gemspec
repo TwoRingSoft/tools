@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.summary     = 'A collection of command line tools.'
   s.description = <<-DESC
   - xcsims: Delete all simulators and recreate one for each compatible platform and device type pairing.
-  - sync-git: Make sure all your GitHub forks are clones into a given directory, and have “upstream” remotes pointing to the repos that were forked.
+  - sync-git: Make sure all your GitHub repos are cloned into a given directory and keep them synced with upstream. Forks are maintained with a remote for both the fork and upstream, both remotes' default branches are tracked in local counterparts, and the upstream default branch is also pushed to the fork.
   - changetag: Extract changelog entries to write into git tag annotation messages.
   - prerelease-podspec: Branch and create/push a release candidate tag, modify the podspec to use that version tag, and try linting it.
   - release-podspec: Create a tag with the version and push it to repo origin, push podspec to CocoaPods trunk.
