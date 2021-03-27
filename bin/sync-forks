@@ -58,7 +58,7 @@ elsif nil != options[:username] && nil != options[:password]
        config.connection_options = {headers: {"X-GitHub-OTP" => options[:otp]}}
      end
   end
-  token = github.auth.create scopes: ['repo'], note: 'sync-forks3'
+  token = github.auth.create scopes: ['repo'], note: 'sync-forks'
   puts "Created new token, use it to call sync-forks again:"
   puts
   puts "\tsync-forks -u #{user} -t #{token.token}"
