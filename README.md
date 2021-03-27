@@ -32,11 +32,8 @@ You should then have all the tools available in your `PATH`.
 
 # TODO
 
-## `sync-forks`
+## `sync-git`
 
-- `--upstream-sync`: fetch upstream's default branch, try to apply new commits to local default branch using `--ff-only` and push to forks' remotes
-- `--tags`: download tags from upstreams, and maybe push to forks
-- `--repo`: only sync the repo name provided
 - `--standardize-remotes`: for forks already cloned locally, inspect the git remotes and ensure a remote exists for the fork's repo named “fork” and one exists for the original repo's remote named “upstream”
 - `--prune`: delete any repositories not found in the forks list received from GitHub api
 
@@ -59,6 +56,6 @@ You should then have all the tools available in your `PATH`.
 
 # Contribute
 
-Issues and pull requests are welcome! 
+Issues and pull requests are welcome!
 
 If this project helped you, please consider <a href="https://www.paypal.me/armcknight">leaving a tip</a> 🤗
