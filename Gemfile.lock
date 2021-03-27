@@ -38,6 +38,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  github_api
   tworingtools
 
 BUNDLED WITH
