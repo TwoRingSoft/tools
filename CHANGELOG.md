@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [6.0.0] 2021-03-27
+
+### Changed
+
+- Renamed `sync-git` to `sync-git-remotes` and removed its username/password options as that auth method is no longer supported by the GitHub API and username is not required for token authentication.
+
+### Fixed
+
+- A few errant renames of `sync-forks` to `sync-git` in old CHANGELOG entries here to preserve history.
+
 ## [5.0.0] 2021-03-27
 
 ### Changed
