@@ -1,0 +1,67 @@
+#! /usr/bin/env ruby
+
+require 'octokit'
+require 'json'
+require 'optparse'
+require_relative '../lib/echoexec'
+require_relative '../lib/git_helpers'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+
+    Usage: sync-git-remotes [options] <directory>
+
+           For each of your GitHub forks, clone your forked version, then go in and add a remote
+           to the upstream version, and set up local tracking branches for both remotes' default
+           branches. Then fast-forward them both, fetch all tags etc.
+
+           <directory> is the path containing the directories holding your forks, and/or
+           to where those you don't yet have should be cloned.
+
+           Options:
+
+  BANNER
+
+  opts.on('-tTOKEN', '--token=TOKEN', 'GitHub personal access token.') do |t| options[:token] = t end
+  opts.on('-rREPO', '--repo-name=REPO', 'The name of a particular repository to sync.') do |repo| options[:repo] = repo end
+  opts.on('-v', '--verbose', 'Enable verbose logging.') do options[:verbose] = true end
+end
+parser.parse!
+root_dir_path = ARGV[0]
+
+# authenticate the github client, producing a token for callers to use if they try with user/pass, as that is rate limited
+github = nil
+if nil != options[:token] then
+  github = Octokit::Client.new(:access_token => options[:token])
+  puts 'Running with provided token...'
+end
+
+github.auto_paginate = true
+
+repos = github.repos
+
+# sync owned repos
+owned_repos = repos.select {|x| !x.fork}
+if options[:repo] != nil then
+  owned_repos.select! {|x| x.name == options[:repo]}
+end
+owned_repos.each do |owned_repo|
+  puts '---'
+  owned_repo_info = github.repo(owned_repo.id)
+  sync_repo(owned_repo_info, root_dir_path)
+end
+
+# get the list of forks to sync
+forks = repos.select {|x| x.fork}
+if options[:repo] != nil then
+  forks.select! {|x| x.name == options[:repo]}
+end
+
+# sync the forks
+forks.each do |forked_repo|
+  puts '---'
+
+  forked_repo_info = github.repo(forked_repo.id)
+  sync_fork(forked_repo_info, root_dir_path)
+end

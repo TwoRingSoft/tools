@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- Improved the functionality of `sync-git` and renamed it to `sync-git`:
+- Improved the functionality of `sync-forks` and renamed it to `sync-git`:
     - syncs all repos, not just forks
     - now it nests forks in subdirectories under `_Forks/` based on the original owners name, so if I fork octocat/Hello-World, octocat/Repo2 and someone/elses_repo, I'd have:
     ```
@@ -326,7 +326,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - `changetag`: a utility to extract changelog entries and write them into git tag annotation messages.
 
-#### `sync-git`
+#### `sync-forks`
 
 - Added specific exit codes per failure mode.
 
@@ -334,7 +334,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
-#### `sync-git`
+#### `sync-fork`
 
 - Include option to specify a single fork repo name to sync, instead of trying to sync them all.
 
@@ -342,7 +342,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Fixed
 
-#### `sync-git`
+#### `sync-fork`
 
 - When a custom path is supplied, make sure the cloned repo directories are written inside it.
 
@@ -350,7 +350,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
-- `sync-git` to check out all your GitHub forks, adding remotes to the original upstream repos for each clone.
+- `sync-fork` to check out all your GitHub forks, adding remotes to the original upstream repos for each clone.
 
 ## [1.0.1] 2018-09-17
 
