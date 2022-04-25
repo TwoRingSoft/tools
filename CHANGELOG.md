@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [6.1.0] 2022-04-25
+
 ### Added
 
 - A semantic tag for nessages in commits that bump version numbers with `bumpr`.
