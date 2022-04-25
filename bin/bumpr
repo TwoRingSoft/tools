@@ -54,5 +54,5 @@ stdout, stderr, status = Open3.capture3(command)
 
 unless options[:no_commit] then
   echo_and_exec "git add #{version_file}"
-  echo_and_exec "git commit --message \"#{stdout}\""
+  echo_and_exec "git commit --message \"chore: #{stdout}\""
 end

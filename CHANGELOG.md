@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- A semantic tag for nessages in commits that bump version numbers with `bumpr`.
+
 ## [6.0.0] 2021-03-27
 
 ### Changed
