@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby
+# coding: utf-8
 
 require 'open3'
 require 'optparse'
@@ -26,6 +27,7 @@ parser = OptionParser.new do |opts|
   opts.on('-n', '--no-changelog', 'Skip operations that would normally update a CHANGELOG.md.') do |skip_changelog| options[:skip_changelog] = true end
   opts.on('-v', '--verbose', 'Pass \'--verbose\' to \'cocoapods spec lint\'.') do |name| options[:verbose] = true end
   opts.on('-rREPO', '--repo=REPO', 'By default, release-podspec pushes the podspec to CocoaPods trunk. By supplying this argument, instead of \`pod trunk push\`, \`pod repo push\` is used instead.') do |repo| options[:repo] = repo end
+  opts.on('-k', '--also-push-to-trunk', 'When pushing to a private repo, also push to trunk afterwards. Ignored if not using --repo.') do |also_push_to_trunk| options[:also_push_to_trunk] = true end
   opts.on('-cCHANGELOG_PATH', '--changelog-path=CHANGELOG_PATH', 'Location of a CHANGELOG document adhering to https://keepachangelog.com/en/1.0.0/ whose version entry should be extracted into an annotated tag for this release candidate. By default, release-podspec looks for //CHANGELOG.md. You can specify another location with this option.') do |changelog_path| options[:changelog_path] = changelog_path end
   opts.on('-tTAG', '--tag=TAG', 'Override for the name of the git tag to form. If set, --podspec-name-in-tag is ignored.') do |tag| options[:tag] = tag end
   opts.on('-e', '--changelog-entry=CHANGELOG_ENTRY', 'The name of the changelog entry, if it differs from the tag name.') do |changelog_entry_name_override| options[:changelog_entry_name_override] = changelog_entry_name_override end
@@ -77,21 +79,26 @@ if options[:skip_import_validation] then
   spec_lint_flags << '--skip-import-validation'
 end
 
-command = String.new
-if options[:repo] != nil then
-	command = "rbenv exec bundle exec pod repo push #{options[:repo]} #{spec_lint_flags.join ' '} #{podspec_path}"
-else
-	command = "rbenv exec bundle exec pod trunk push #{podspec_path} #{spec_lint_flags.join ' '}"
+def execute_command command
+  puts command
+  stdout, stderr, status = Open3.capture3 command
+
+  puts stdout
+
+  if status != 0 then
+    puts "Podspec push failed:\nstderr: #{stderr}"
+    exit TwoRingToolError::PODSPEC_PUSH_FAILED
+  else
+    puts "Podspec pushed successfully!"
+  end
 end
 
-puts command
-stdout, stderr, status = Open3.capture3 command
-
-puts stdout
-
-if status != 0 then
-  puts "Podspec push failed:\nstderr: #{stderr}"
-  exit TwoRingToolError::PODSPEC_PUSH_FAILED
+command = String.new
+if options[:repo] != nil then
+  execute_command "rbenv exec bundle exec pod repo push #{options[:repo]} #{spec_lint_flags.join ' '} #{podspec_path}"
+  if options[:also_push_to_trunk] then
+    execute_command "rbenv exec bundle exec pod trunk push #{podspec_path} #{spec_lint_flags.join ' '}"
+  end
 else
-  puts "Podspec pushed successfully!"
+  execute_command "rbenv exec bundle exec pod trunk push #{podspec_path} #{spec_lint_flags.join ' '}"
 end

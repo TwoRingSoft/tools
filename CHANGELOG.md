@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- An option `--also-push-to-trunk` for `release-podspec` when it's invoked to push to a private podspec repo, to also push it to trunk.
+
 ## [6.1.0] 2022-04-25
 
 ### Added
